@@ -1,0 +1,14 @@
+{
+  "id": "{145BF8F7-6E00-465F-89A1-71CA24DE521A}",
+  "name": "IPS2PioneerVSX923",
+  "type": 3,
+  "vendor": "JP-IPS-Modules",
+  "aliases":
+  [
+    "IPS2AcerP5530"
+  ],
+  "parentRequirements": ["{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}"],
+  "childRequirements": [],
+  "implemented": ["{018EF6B5-AB94-40C6-AA53-46943E824ACF}"],
+  "prefix": "IPS2AcerP5530"
+}
