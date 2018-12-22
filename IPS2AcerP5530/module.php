@@ -94,7 +94,8 @@ class IPS2AcerP5530 extends IPSModule
 		}
 	}
 	
-	public function ReceiveData($JSONString) {
+	public function ReceiveData($JSONString) 
+	{
  	    	SetValueInteger($this->GetIDForIdent("LastKeepAlive"), time() );
 		// Empfangene Daten vom I/O
 		$Data = json_decode($JSONString);
@@ -104,7 +105,7 @@ class IPS2AcerP5530 extends IPSModule
 		$Message = trim($Message, "\x00..\x1F");
 		
 		
-		}
+
 	}
 	
 	public function RequestAction($Ident, $Value) 
