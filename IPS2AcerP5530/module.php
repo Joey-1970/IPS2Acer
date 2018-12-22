@@ -73,10 +73,10 @@ class IPS2AcerP5530 extends IPSModule
 				{
 				    	$Result = @IPS_ApplyChanges($ParentID);
 					If ($Result) {
-						$this->SendDebug("ApplyChanges", "Einrichtung des UDP Socket erfolgreich", 0);
+						$this->SendDebug("ApplyChanges", "Einrichtung des Client Socket erfolgreich", 0);
 					}
 					else {
-						$this->SendDebug("ApplyChanges", "Einrichtung des UDP Socket nicht erfolgreich!", 0);
+						$this->SendDebug("ApplyChanges", "Einrichtung des Client Socket nicht erfolgreich!", 0);
 					}
 				}
 			}
