@@ -113,7 +113,7 @@ class IPS2AcerP5530 extends IPSModule
   		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->GetParentStatus() == 102)) {
 			switch($Ident) {
 				case "Power":
-					If (GetValueBoolean($this->GetIDForIdent("Power")) == true) {
+					If ($Value == true) {
 						$this->SetData("* 0 IR 001");
 					}
 					else {
