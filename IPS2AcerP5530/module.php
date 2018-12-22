@@ -95,11 +95,11 @@ class IPS2AcerP5530 extends IPSModule
 	}
 	
 	public function ReceiveData($JSONString) {
- 	    	//IPS_SemaphoreLeave("Communication");
+ 	    	SetValueInteger($this->GetIDForIdent("LastKeepAlive"), time() );
 		// Empfangene Daten vom I/O
 		$Data = json_decode($JSONString);
 		$Message = utf8_decode($Data->Buffer);
-		
+		$this->SendDebug("ReceiveData", $Message, 0);
 		// Entfernen der Steuerzeichen
 		$Message = trim($Message, "\x00..\x1F");
 		
@@ -110,13 +110,30 @@ class IPS2AcerP5530 extends IPSModule
 	public function RequestAction($Ident, $Value) 
 	{
   		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->GetParentStatus() == 102)) {
-			
-				
+			switch($Ident) {
+				case "Power":
+					If (GetValueBoolean($this->GetIDForIdent("Power")) == true) {
+						$this->SetData("* 0 IR 001");
+					}
+					else {
+						$this->SetData("* 0 IR 002");
+					}
+					break;
+			default:
+				    throw new Exception("Invalid Ident");
+			}
 	    	}
 		
 	}
 	
-	
+	private function SetData(String $Message)
+	{
+		If ($this->ReadPropertyBoolean("Open") == true) {
+			$this->SendDebug("SetData", "Message: ".$Message, 0);
+			$Message = $Message.chr(13);
+			$Result = $this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => utf8_encode($Message))));
+		}
+	}
 	
 	private function ConnectionTest()
 	{
