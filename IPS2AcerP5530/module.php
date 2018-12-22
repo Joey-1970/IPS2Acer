@@ -16,7 +16,14 @@ class IPS2AcerP5530 extends IPSModule
            	$this->RequireParent("{3CFF0FD9-E306-41DB-9B5A-9D06D38576C3}");
 		$this->RegisterPropertyBoolean("Open", false);
 	    	$this->RegisterPropertyString("IPAddress", "127.0.0.1");
+		$this->RegisterPropertyInteger("Port", 0);
 		
+		// Statusvariablen anlegen
+		$this->RegisterVariableInteger("LastKeepAlive", "Letztes Keep Alive", "~UnixTimestamp", 10);
+		$this->DisableAction("LastKeepAlive");
+		
+		$this->RegisterVariableBoolean("Power", "Power", "~Switch", 20);
+		$this->EnableAction("Power");
 		
 
 		
@@ -34,6 +41,7 @@ class IPS2AcerP5530 extends IPSModule
 		$arrayElements = array(); 
 		$arrayElements[] = array("name" => "Open", "type" => "CheckBox",  "caption" => "Aktiv"); 
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "IPAddress", "caption" => "IP");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Port",  "caption" => "Port"); 
  		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		
 		
@@ -52,8 +60,11 @@ class IPS2AcerP5530 extends IPSModule
 				If (IPS_GetProperty($ParentID, 'Host') <> $this->ReadPropertyString('IPAddress')) {
 		                	IPS_SetProperty($ParentID, 'Host', $this->ReadPropertyString('IPAddress'));
 				}
-				If (IPS_GetProperty($ParentID, 'Port') <> 8102) {
-		                	IPS_SetProperty($ParentID, 'Port', 8102);
+				If (IPS_GetProperty($ParentID, 'Port') <> $this->ReadPropertyInteger('Port')) {
+		                	IPS_SetProperty($ParentID, 'Port', $this->ReadPropertyInteger('Port'));
+				}
+				If (IPS_GetProperty($ParentID, 'Open') <> $this->ReadPropertyBoolean("Open")) {
+		                	IPS_SetProperty($ParentID, 'Open', $this->ReadPropertyBoolean("Open"));
 				}
 				If (IPS_GetName($ParentID) == "Client Socket") {
 		                	IPS_SetName($ParentID, "IPS2Acer5530");
