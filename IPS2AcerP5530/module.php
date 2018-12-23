@@ -5,7 +5,7 @@ class IPS2AcerP5530 extends IPSModule
 	{
 		//Never delete this line!
 		parent::Destroy();
-		$this->SetTimerInterval("KeepAlive", 0);
+		$this->SetTimerInterval("State", 0);
 	}
 	
 	// Überschreibt die interne IPS_Create($id) Funktion
@@ -17,6 +17,7 @@ class IPS2AcerP5530 extends IPSModule
 		$this->RegisterPropertyBoolean("Open", false);
 	    	$this->RegisterPropertyString("IPAddress", "127.0.0.1");
 		$this->RegisterPropertyInteger("Port", 0);
+		$this->RegisterTimer("State", 0, 'IPS2AcerP5530_State($_IPS["TARGET"]);');
 		
 		// Profile anlegen
 		$this->RegisterProfileInteger("IPS2AcerP5530.Source", "TV", "", "", 0, 1, 0);
@@ -100,11 +101,12 @@ class IPS2AcerP5530 extends IPSModule
 				$this->SetStatus(102);
 				// Erste Abfrage der Daten
 				$this->GetData();
+				$this->SetTimerInterval("State", 5 * 1000);
 				
 			}
 			else {
 				$this->SetStatus(104);
-				
+				$this->SetTimerInterval("State", 0);
 			}	   
 		}
 	}
@@ -187,6 +189,14 @@ class IPS2AcerP5530 extends IPSModule
 			}
 	    	}
 		
+	}
+	
+	public function State()
+	{
+		If ($this->ReadPropertyBoolean("Open") == true) {
+			$Message = "* 0 Lamp ?".chr(13);
+			$Result = $this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => utf8_encode($Message))));
+		}
 	}
 	
 	private function SetData(String $Message)
