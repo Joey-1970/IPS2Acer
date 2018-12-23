@@ -171,20 +171,11 @@ class IPS2AcerP5530 extends IPSModule
 	{
 	      $result = false;
 	      If (Sys_Ping($this->ReadPropertyString("IPAddress"), 2000)) {
-			//IPS_LogMessage("IPS2PioneerBDP450","Angegebene IP ".$this->ReadPropertyString("IPAddress")." reagiert");
-			$status = @fsockopen($this->ReadPropertyString("IPAddress"), 8102, $errno, $errstr, 10);
-				if (!$status) {
-					IPS_LogMessage("IPS2PioneerBDP450","Port ist geschlossen!");				
-	   			}
-	   			else {
-	   				fclose($status);
-					//IPS_LogMessage("IPS2PioneerBDP450","Port ist geöffnet");
-					$result = true;
-					$this->SetStatus(102);
-	   			}
+			IPS_LogMessage("IPS2AcerP5530","Angegebene IP ".$this->ReadPropertyString("IPAddress")." reagiert");
+			$this->SetStatus(102);
 		}
 		else {
-			IPS_LogMessage("IPS2PioneerBDP450","IP ".$this->ReadPropertyString("IPAddress")." reagiert nicht!");
+			IPS_LogMessage("IPS2AcerP5530","IP ".$this->ReadPropertyString("IPAddress")." reagiert nicht!");
 			$this->SetStatus(104);
 		}
 	return $result;
