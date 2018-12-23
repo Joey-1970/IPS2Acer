@@ -25,7 +25,8 @@ class IPS2AcerP5530 extends IPSModule
 		$this->RegisterVariableBoolean("Power", "Power", "~Switch", 20);
 		$this->EnableAction("Power");
 		
-
+		$this->RegisterVariableBoolean("ECO", "ECO", "~Switch", 30);
+		$this->EnableAction("ECO");
 		
 		
 	}
@@ -108,12 +109,25 @@ class IPS2AcerP5530 extends IPSModule
 		$LastMessage = $this->GetBuffer("LastMessage");
 		$this->SendDebug("ReceiveData", "Letze Message: ".$LastMessage." Antwort: ".$Message, 0);
 		
-		switch($Message) {
+		$MessageParts = explode(chr(13), $Message);
+		
+		foreach ($MessageParts as $Message) {
+			// Entfernen der Steuerzeichen
+			$Message = trim($Message, "\x00..\x1F");
+			$this->SendDebug("ReceiveData", $Message, 0);
+		
+			switch($Message) {
 				case "LAMP 0":
 					SetValueBoolean($this->GetIDForIdent("Power"), false);
 					break;
 				case "LAMP 1":
 					SetValueBoolean($this->GetIDForIdent("Power"), true);
+					break;
+				case "ECO 0":
+					SetValueBoolean($this->GetIDForIdent("ECO"), false);
+					break;
+				case "ECO 1":
+					SetValueBoolean($this->GetIDForIdent("ECO"), true);
 					break;
 				case "*000":
 					$this->SendDebug("ReceiveData", "*000", 0);
@@ -121,7 +135,7 @@ class IPS2AcerP5530 extends IPSModule
 				case "*001":
 					$this->SendDebug("ReceiveData", "*001", 0);
 					break;
-		}
+			}
 	}
 	
 	public function RequestAction($Ident, $Value) 
@@ -135,6 +149,14 @@ class IPS2AcerP5530 extends IPSModule
 					}
 					else {
 						$this->SetData("* 0 IR 002");
+					}
+					break;
+				case "ECO":
+					If ($Value == true) {
+						$this->SetData("* 0 IR 051");
+					}
+					else {
+						$this->SetData("* 0 IR 055");
 					}
 					break;
 			default:
