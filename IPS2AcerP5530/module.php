@@ -85,6 +85,7 @@ class IPS2AcerP5530 extends IPSModule
 				
 				$this->SetStatus(102);
 				// Erste Abfrage der Daten
+				$this->GetData();
 				
 			}
 			else {
