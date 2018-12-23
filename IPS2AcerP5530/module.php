@@ -136,6 +136,7 @@ class IPS2AcerP5530 extends IPSModule
 					$this->SendDebug("ReceiveData", "*001", 0);
 					break;
 			}
+		}
 	}
 	
 	public function RequestAction($Ident, $Value) 
