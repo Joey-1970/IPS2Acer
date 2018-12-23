@@ -159,10 +159,10 @@ class IPS2AcerP5530 extends IPSModule
 					SetValueString($this->GetIDForIdent("Res"), substr($Message, 4));
 					break;
 				case "*000":
-					$this->SendDebug("ReceiveData", "*000", 0);
+					$this->SendDebug("ReceiveData", "Abfrage erfolgreich!", 0);
 					break;
 				case "*001":
-					$this->SendDebug("ReceiveData", "*001", 0);
+					$this->SendDebug("ReceiveData", "Abfrage aktuell nicht möglich!", 0);
 					break;
 			}
 		}
@@ -211,6 +211,7 @@ class IPS2AcerP5530 extends IPSModule
 			$this->SetBuffer("LastMessage", $Message);
 			$Message = $Message.chr(13);
 			$Result = $this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => utf8_encode($Message))));
+			IPS_Sleep(300);
 		}
 	}
 	
@@ -223,7 +224,7 @@ class IPS2AcerP5530 extends IPSModule
 				$Message = $Value.chr(13);
 				$this->SetBuffer("LastMessage", $Value);
 				$Result = $this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => utf8_encode($Message))));
-				IPS_Sleep(200);
+				IPS_Sleep(300);
 			}
 		}
 	}
