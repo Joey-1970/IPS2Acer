@@ -162,7 +162,7 @@ class IPS2AcerP5530 extends IPSModule
 					$this->SendDebug("ReceiveData", "Abfrage erfolgreich!", 0);
 					break;
 				case "*001":
-					$this->SendDebug("ReceiveData", "Abfrage aktuell nicht möglich!", 0);
+					$this->SendDebug("ReceiveData", "Abfrage aktuell nicht moeglich!", 0);
 					break;
 			}
 		}
