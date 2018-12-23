@@ -24,18 +24,23 @@ class IPS2AcerP5530 extends IPSModule
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 1, "HDMI 2", "TV", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 2, "Media", "TV", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 3, "USB Display", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 4, "Analog RGB for D-Sub", "TV", -1);
 		
 		// Statusvariablen anlegen
 		$this->RegisterVariableInteger("LastKeepAlive", "Letztes Keep Alive", "~UnixTimestamp", 10);
 		$this->DisableAction("LastKeepAlive");
 		
-		$this->RegisterVariableBoolean("Power", "Power", "~Switch", 20);
+		$this->RegisterVariableString("Name", "Name", "", 20);
+		$this->RegisterVariableString("Model", "Model", "", 30);
+		$this->RegisterVariableString("Res", "Resolution", "", 40);
+		
+		$this->RegisterVariableBoolean("Power", "Power", "~Switch", 50);
 		$this->EnableAction("Power");
 		
-		$this->RegisterVariableBoolean("ECO", "ECO", "~Switch", 30);
+		$this->RegisterVariableBoolean("ECO", "ECO", "~Switch", 60);
 		$this->EnableAction("ECO");
 		
-		$this->RegisterVariableInteger("Source", "Source", "IPS2AcerP5530.Source", 40);
+		$this->RegisterVariableInteger("Source", "Source", "IPS2AcerP5530.Source", 70);
 		$this->EnableAction("Source");
 	}
 	
@@ -136,6 +141,15 @@ class IPS2AcerP5530 extends IPSModule
 					break;
 				case "ECO 1":
 					SetValueBoolean($this->GetIDForIdent("ECO"), true);
+					break;
+				case preg_match('/Model.*/', $Message) ? $Message : !$Message:
+					SetValueString($this->GetIDForIdent("Model"), substr($Message, 6));
+					break;
+				case preg_match('/Name.*/', $Message) ? $Message : !$Message:
+					SetValueString($this->GetIDForIdent("Name"), substr($Message, 5));
+					break;
+				case preg_match('/Res.*/', $Message) ? $Message : !$Message:
+					SetValueString($this->GetIDForIdent("Res"), substr($Message, 4));
 					break;
 				case "*000":
 					$this->SendDebug("ReceiveData", "*000", 0);
