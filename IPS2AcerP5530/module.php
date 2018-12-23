@@ -173,6 +173,7 @@ class IPS2AcerP5530 extends IPSModule
 	      If (Sys_Ping($this->ReadPropertyString("IPAddress"), 2000)) {
 			IPS_LogMessage("IPS2AcerP5530","Angegebene IP ".$this->ReadPropertyString("IPAddress")." reagiert");
 			$this->SetStatus(102);
+		      	$result = true;
 		}
 		else {
 			IPS_LogMessage("IPS2AcerP5530","IP ".$this->ReadPropertyString("IPAddress")." reagiert nicht!");
