@@ -19,9 +19,11 @@ class IPS2AcerP5530 extends IPSModule
 		$this->RegisterPropertyInteger("Port", 0);
 		
 		// Profile anlegen
-		$this->RegisterProfileInteger("IPS2AcerP5530.Source", "Lock", "", "", 0, 1, 0);
-		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 0, "LOCK OFF", "LockOpen", -1);
-		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 1, "LOCK ON", "LockClosed", -1);
+		$this->RegisterProfileInteger("IPS2AcerP5530.Source", "TV", "", "", 0, 1, 0);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 0, "HDMI 1", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 1, "HDMI 2", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 2, "Media", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 3, "USB Display", "TV", -1);
 		
 		// Statusvariablen anlegen
 		$this->RegisterVariableInteger("LastKeepAlive", "Letztes Keep Alive", "~UnixTimestamp", 10);
@@ -33,7 +35,8 @@ class IPS2AcerP5530 extends IPSModule
 		$this->RegisterVariableBoolean("ECO", "ECO", "~Switch", 30);
 		$this->EnableAction("ECO");
 		
-		
+		$this->RegisterVariableInteger("Source", "Source", "IPS2AcerP5530.Source", 40);
+		$this->EnableAction("Source");
 	}
 	
 	public function GetConfigurationForm() { 
