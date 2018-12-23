@@ -18,6 +18,11 @@ class IPS2AcerP5530 extends IPSModule
 	    	$this->RegisterPropertyString("IPAddress", "127.0.0.1");
 		$this->RegisterPropertyInteger("Port", 0);
 		
+		// Profile anlegen
+		$this->RegisterProfileInteger("IPS2AcerP5530.Source", "Lock", "", "", 0, 1, 0);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 0, "LOCK OFF", "LockOpen", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 1, "LOCK ON", "LockClosed", -1);
+		
 		// Statusvariablen anlegen
 		$this->RegisterVariableInteger("LastKeepAlive", "Letztes Keep Alive", "~UnixTimestamp", 10);
 		$this->DisableAction("LastKeepAlive");
