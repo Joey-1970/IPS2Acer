@@ -143,7 +143,7 @@ class IPS2AcerP5530 extends IPSModule
 					SetValueBoolean($this->GetIDForIdent("ECO"), true);
 					break;
 				case preg_match('/Model.*/', $Message) ? $Message : !$Message:
-					SetValueString($this->GetIDForIdent("Model"), substr($Message, 6));
+					SetValueString($this->GetIDForIdent("Model"), substr($Message, 6, -4));
 					break;
 				case preg_match('/Name.*/', $Message) ? $Message : !$Message:
 					SetValueString($this->GetIDForIdent("Name"), substr($Message, 5));
@@ -208,7 +208,7 @@ class IPS2AcerP5530 extends IPSModule
 				$Message = $Value.chr(13);
 				$this->SetBuffer("LastMessage", $Value);
 				$Result = $this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => utf8_encode($Message))));
-				IPS_Sleep(100);
+				IPS_Sleep(200);
 			}
 		}
 	}
