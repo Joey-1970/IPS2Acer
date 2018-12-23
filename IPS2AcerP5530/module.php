@@ -130,6 +130,7 @@ class IPS2AcerP5530 extends IPSModule
 			switch($Ident) {
 				case "Power":
 					If ($Value == true) {
+						$this->SetData("OKOKOKOKOK");
 						$this->SetData("* 0 IR 001");
 					}
 					else {
