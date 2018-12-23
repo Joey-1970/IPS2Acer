@@ -133,12 +133,12 @@ class IPS2AcerP5530 extends IPSModule
 		
 			switch($Message) {
 				case "LAMP 0":
-					If (GetValueBoolean($this->GetIDForIdent("Power") == true) {
+					If (GetValueBoolean($this->GetIDForIdent("Power")) == true) {
 						SetValueBoolean($this->GetIDForIdent("Power"), false);
 					}
 					break;
 				case "LAMP 1":
-					If (GetValueBoolean($this->GetIDForIdent("Power") == false) {
+					If (GetValueBoolean($this->GetIDForIdent("Power")) == false) {
 						SetValueBoolean($this->GetIDForIdent("Power"), true);
 						$this->GetData();
 					}
