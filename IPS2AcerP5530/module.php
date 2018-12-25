@@ -199,6 +199,28 @@ class IPS2AcerP5530 extends IPSModule
 						$this->SetData("* 0 IR 055");
 					}
 					break;
+				case "Control":
+					If ($Value == 0) {
+						// Left
+						$this->SetData("* 0 IR 012");
+					}
+					else If ($Value == 1) {
+						// Up
+						$this->SetData("* 0 IR 009");
+					}
+					else If ($Value == 2) {
+						// Menu
+						$this->SetData("* 0 IR 008");
+					}
+					else If ($Value == 3) {
+						// Down
+						$this->SetData("* 0 IR 010");
+					}
+					else If ($Value == 4) {
+						// Down
+						$this->SetData("* 0 IR 011");
+					}
+					break;
 			default:
 				    throw new Exception("Invalid Ident");
 			}
