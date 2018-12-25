@@ -30,7 +30,7 @@ class IPS2AcerP5530 extends IPSModule
 		$this->RegisterProfileInteger("IPS2AcerP5530.Control", "Move", "", "", 0, 1, 0);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Control", 0, "Left", "Move", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Control", 1, "Up", "Move", -1);
-		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Control", 2, "Menu", "Move", 0x0000FF);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Control", 2, "Enter", "Move", 0x0000FF);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Control", 3, "Down", "Move", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Control", 4, "Right", "Move", -1);
 		
@@ -209,8 +209,8 @@ class IPS2AcerP5530 extends IPSModule
 						$this->SetData("* 0 IR 009");
 					}
 					else If ($Value == 2) {
-						// Menu
-						$this->SetData("* 0 IR 008");
+						// Enter
+						$this->SetData("* 0 IR 013");
 					}
 					else If ($Value == 3) {
 						// Down
