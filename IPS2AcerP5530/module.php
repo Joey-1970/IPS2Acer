@@ -27,6 +27,13 @@ class IPS2AcerP5530 extends IPSModule
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 3, "USB Display", "TV", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 4, "Analog RGB for D-Sub", "TV", -1);
 		
+		$this->RegisterProfileInteger("IPS2AcerP5530.Control", "Move", "", "", 0, 1, 0);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Control", 0, "Left", "Move", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Control", 1, "Up", "Move", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Control", 2, "Menu", "Move", 0x0000FF);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Control", 3, "Down", "Move", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Control", 4, "Right", "Move", -1);
+		
 		// Statusvariablen anlegen
 		$this->RegisterVariableInteger("LastKeepAlive", "Letztes Keep Alive", "~UnixTimestamp", 10);
 		$this->DisableAction("LastKeepAlive");
@@ -38,10 +45,13 @@ class IPS2AcerP5530 extends IPSModule
 		$this->RegisterVariableBoolean("Power", "Power", "~Switch", 50);
 		$this->EnableAction("Power");
 		
-		$this->RegisterVariableBoolean("ECO", "ECO", "~Switch", 60);
+		$this->RegisterVariableInteger("Control", "Control", "IPS2AcerP5530.Control", 60);
+		$this->EnableAction("Control");
+		
+		$this->RegisterVariableBoolean("ECO", "ECO", "~Switch", 70);
 		$this->EnableAction("ECO");
 		
-		$this->RegisterVariableInteger("Source", "Source", "IPS2AcerP5530.Source", 70);
+		$this->RegisterVariableInteger("Source", "Source", "IPS2AcerP5530.Source", 80);
 		$this->EnableAction("Source");
 	}
 	
