@@ -211,6 +211,15 @@ class IPS2AcerP5530 extends IPSModule
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$Message = "* 0 Lamp ?".chr(13);
 			$Result = $this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => utf8_encode($Message))));
+			If (GetValueBoolean($this->GetIDForIdent("Power")) == true) {
+				$MessageArray = array("* 0 Src ?", "* 0 IR 052", "* 0 IR 073", "* 0 Lamp");
+				foreach ($MessageArray as $Value) {
+					$Message = $Value.chr(13);
+					$this->SetBuffer("LastMessage", $Value);
+					$Result = $this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => utf8_encode($Message))));
+					IPS_Sleep(300);
+				}
+			}
 		}
 	}
 	
