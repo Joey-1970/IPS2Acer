@@ -200,6 +200,7 @@ class IPS2AcerP5530 extends IPSModule
 					}
 					break;
 				case "Control":
+					SetValueInteger($this->GetIDForIdent("Control"), $Value);
 					If ($Value == 0) {
 						// Left
 						$this->SetData("* 0 IR 012");
