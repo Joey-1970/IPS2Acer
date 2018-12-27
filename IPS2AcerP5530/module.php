@@ -271,6 +271,57 @@ class IPS2AcerP5530 extends IPSModule
 		}
 	}
 	
+	public function GetcURLData()
+	{
+		If ($this->ReadPropertyBoolean("Open") == true) {
+			$this->SendDebug("GetcURLData", "Ausfuehrung", 0);
+			$username = "Administrator";
+			$password = "admin";
+			$url = "http://192.168.178.21/form/control_cgi";
+
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_USERPWD, "$username:$password");
+			curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+			$output = curl_exec($ch);
+			curl_close($ch);
+			
+			
+			$output = preg_replace('/("(.*?)"|(\w+))(\s*:\s*)\+?(0+(?=\d))?(".*?"|.)/s', '"$2$3"$4$6', $output);
+			$output = strip_tags($output);
+			$json = json_decode($output);
+			//print_r($json);
+			/*
+			(
+			    [pwr] => 1  Power Bool
+			    [hid] => 0 Hide Bool
+			    [frz] => 0 Freeze
+			    [eco] => 0 ECO
+			    [src] => 6 Source
+			    [bri] => 0 Brightness
+			    [con] => 0 Contrast
+			    [vks] => 0 V. Keystone
+			    [hks] => 0 H. Keystone
+			    [gam] => 2.2 Gamma
+			    [ctp] => CT1 Color Temp
+			    [mod] => 255 Display Mode
+			    [vol] => 20 Volume
+			    [apr] => 255 Aspect Ratio
+			    [zom] => 1.0 Digital Zoom
+			    [prj] => 0 Projection
+			    [lgo] => 0 Startup Screen
+			    [aks] => 1 Auto Keystone 	
+			    [dyar] => 29
+			)
+			*/
+
+			//echo $json->pwr;
+		}
+	}
+	
 	private function ConnectionTest()
 	{
 	      $result = false;
