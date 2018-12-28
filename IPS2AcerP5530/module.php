@@ -104,7 +104,7 @@ class IPS2AcerP5530 extends IPSModule
 	
 	public function RequestAction($Ident, $Value) 
 	{
-  		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->GetParentStatus() == 102)) {
+  		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
 			switch($Ident) {
 				case "Power":
 					If ($Value == true) {
@@ -269,12 +269,13 @@ class IPS2AcerP5530 extends IPSModule
 	{
 	      $result = false;
 	      If (Sys_Ping($this->ReadPropertyString("IPAddress"), 2000)) {
-			IPS_LogMessage("IPS2AcerP5530","Angegebene IP ".$this->ReadPropertyString("IPAddress")." reagiert");
+			//IPS_LogMessage("IPS2AcerP5530","Angegebene IP ".$this->ReadPropertyString("IPAddress")." reagiert");
 			$this->SetStatus(102);
 		      	$result = true;
 		}
 		else {
 			IPS_LogMessage("IPS2AcerP5530","IP ".$this->ReadPropertyString("IPAddress")." reagiert nicht!");
+			$this->SendDebug("ConnectionTest", "IP ".$this->ReadPropertyString("IPAddress")." reagiert nicht!", 0);
 			$this->SetStatus(104);
 		}
 	return $result;
@@ -314,19 +315,5 @@ class IPS2AcerP5530 extends IPSModule
 	        IPS_SetVariableProfileValues($Name, $MinValue, $MaxValue, $StepSize);
 	        IPS_SetVariableProfileDigits($Name, $Digits);
 	}
-	
-	private function GetParentID()
-	{
-		$ParentID = (IPS_GetInstance($this->InstanceID)['ConnectionID']);  
-	return $ParentID;
-	}
-	
-	private function GetParentStatus()
-	{
-		$Status = (IPS_GetInstance($this->GetParentID())['InstanceStatus']);  
-	return $Status;
-	}
-	
-	
 }
 ?>
