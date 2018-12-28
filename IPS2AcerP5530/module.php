@@ -56,6 +56,11 @@ class IPS2AcerP5530 extends IPSModule
 		
 		
 		$this->RegisterProfileInteger("IPS2AcerP5530.Volume", "Speaker", "", "", 0, 100, 5);
+		$this->RegisterProfileInteger("IPS2AcerP5530.Brightness", "Speaker", "", "", 0, 100, 1);
+		$this->RegisterProfileInteger("IPS2AcerP5530.Contrast", "Speaker", "", "", 0, 100, 1);
+		$this->RegisterProfileInteger("IPS2AcerP5530.VKeystone", "Speaker", "", "", -20, +20, 1);
+		$this->RegisterProfileInteger("IPS2AcerP5530.HKeystone", "Speaker", "", "", -20, +20, 1);
+
 
 		// Statusvariablen anlegen
 		$this->RegisterVariableInteger("LastKeepAlive", "Letztes Keep Alive", "~UnixTimestamp", 10);
@@ -79,16 +84,16 @@ class IPS2AcerP5530 extends IPSModule
 		$this->RegisterVariableInteger("Volume", "Volume", "IPS2AcerP5530.Volume", 100);
 		$this->EnableAction("Volume");
 		
-		$this->RegisterVariableInteger("Brightness", "Brightness", "", 110);
+		$this->RegisterVariableInteger("Brightness", "Brightness", "IPS2AcerP5530.Brightness", 110);
 		$this->EnableAction("Brightness");
 		
-		$this->RegisterVariableInteger("Contrast", "Contrast", "", 120);
+		$this->RegisterVariableInteger("Contrast", "Contrast", "IPS2AcerP5530.Contrast", 120);
 		$this->EnableAction("Contrast");
 		
-		$this->RegisterVariableInteger("VKeystone", "V.-Keystone", "", 130);
+		$this->RegisterVariableInteger("VKeystone", "V.-Keystone", "IPS2AcerP5530.VKeystone", 130);
 		$this->EnableAction("VKeystone");
 		
-		$this->RegisterVariableInteger("HKeystone", "H.-Keystone", "", 140);
+		$this->RegisterVariableInteger("HKeystone", "H.-Keystone", "HKeystone", 140);
 		$this->EnableAction("HKeystone");
 	}
 	
