@@ -86,11 +86,13 @@ class IPS2AcerP5530 extends IPSModule
 		parent::ApplyChanges();
 		
 		If (IPS_GetKernelRunlevel() == 10103) {
-			If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
+			If ($this->ReadPropertyBoolean("Open") == true) {
 				
 				$this->SetStatus(102);
-				// Erste Abfrage der Daten
-				$this->GetData();
+				If ($this->ConnectionTest() == true) {
+					// Erste Abfrage der Daten
+					$this->GetData();
+				}
 				$this->SetTimerInterval("State", 5 * 1000);
 				
 			}
