@@ -13,7 +13,6 @@ class IPS2AcerP5530 extends IPSModule
         {
             	// Diese Zeile nicht löschen.
             	parent::Create();
-           	$this->RequireParent("{3CFF0FD9-E306-41DB-9B5A-9D06D38576C3}");
 		$this->RegisterPropertyBoolean("Open", false);
 	    	$this->RegisterPropertyString("IPAddress", "127.0.0.1");
 		$this->RegisterPropertyString("User", "User");
@@ -27,23 +26,13 @@ class IPS2AcerP5530 extends IPSModule
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 20, "VGA IN 1", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 21, "VGA IN 2", "TV", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 22, "Video", "TV", -1);
-		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 2, "Media", "TV", -1);
-		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 3, "USB Display", "TV", -1);
-		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 4, "Analog RGB for D-Sub", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 33, "LAN/Wifi", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 34, "Media", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 35, "USB Display", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 36, "Mirroring Display", "TV", -1);
 		
 		
-			 		          <option value="33" -1>LAN/WiFi</option>
-			 		          <option value="34" -1>Media</option>
-			 		          <option value="35" -1>USB Display</option>
-			 		          <option value="36" -1>Mirroring Display</option>
-		
-		$this->RegisterProfileInteger("IPS2AcerP5530.Control", "Move", "", "", 0, 1, 0);
-		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Control", 0, "Left", "Move", -1);
-		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Control", 1, "Up", "Move", -1);
-		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Control", 2, "Enter", "Move", 0x0000FF);
-		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Control", 3, "Down", "Move", -1);
-		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Control", 4, "Right", "Move", -1);
-		
+
 		// Statusvariablen anlegen
 		$this->RegisterVariableInteger("LastKeepAlive", "Letztes Keep Alive", "~UnixTimestamp", 10);
 		$this->DisableAction("LastKeepAlive");
@@ -55,13 +44,16 @@ class IPS2AcerP5530 extends IPSModule
 		$this->RegisterVariableBoolean("Power", "Power", "~Switch", 50);
 		$this->EnableAction("Power");
 		
-		$this->RegisterVariableInteger("Control", "Control", "IPS2AcerP5530.Control", 60);
-		$this->EnableAction("Control");
+		$this->RegisterVariableBoolean("Hide", "Hide", "~Switch", 60);
+		$this->EnableAction("Hide");
 		
-		$this->RegisterVariableBoolean("ECO", "ECO", "~Switch", 70);
+		$this->RegisterVariableBoolean("Freeze", "Freeze", "~Switch", 70);
+		$this->EnableAction("Freeze");
+		
+		$this->RegisterVariableBoolean("ECO", "ECO", "~Switch", 80);
 		$this->EnableAction("ECO");
 		
-		$this->RegisterVariableInteger("Source", "Source", "IPS2AcerP5530.Source", 80);
+		$this->RegisterVariableInteger("Source", "Source", "IPS2AcerP5530.Source", 90);
 		$this->EnableAction("Source");
 	}
 	
