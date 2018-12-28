@@ -69,7 +69,10 @@ class IPS2AcerP5530 extends IPSModule
 		$arrayElements = array(); 
 		$arrayElements[] = array("name" => "Open", "type" => "CheckBox",  "caption" => "Aktiv"); 
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "IPAddress", "caption" => "IP");
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Port",  "caption" => "Port"); 
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "MAC", "caption" => "MAC");
+		$arrayElements[] = array("type" => "Label", "label" => "Zugriffsdaten der Projektor-Website");
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "User", "caption" => "User");
+		$arrayElements[] = array("type" => "PasswordTextBox", "name" => "Password", "caption" => "Password");
  		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		
 		
