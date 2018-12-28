@@ -55,6 +55,18 @@ class IPS2AcerP5530 extends IPSModule
 		
 		$this->RegisterVariableInteger("Volume", "Volume", "IPS2AcerP5530.Volume", 100);
 		$this->EnableAction("Volume");
+		
+		$this->RegisterVariableInteger("Brightness", "Brightness", "", 110);
+		$this->EnableAction("Brightness");
+		
+		$this->RegisterVariableInteger("Contrast", "Contrast", "", 120);
+		$this->EnableAction("Contrast");
+		
+		$this->RegisterVariableInteger("VKeystone", "V.-Keystone", "", 130);
+		$this->EnableAction("VKeystone");
+		
+		$this->RegisterVariableInteger("HKeystone", "H.-Keystone", "", 140);
+		$this->EnableAction("HKeystone");
 	}
 	
 	public function GetConfigurationForm() { 
@@ -132,6 +144,18 @@ class IPS2AcerP5530 extends IPSModule
 					break;
 				case "Volume":
 						$this->SetcURLData("vol=".$Value);
+					break;
+				case "Brightness":
+						$this->SetcURLData("bri=".$Value);
+					break;
+				case "Contrast":
+						$this->SetcURLData("con=".$Value);
+					break;
+				case "VKeystone":
+						$this->SetcURLData("vks=".$Value);
+					break;
+				case "HKeystone":
+						$this->SetcURLData("hks=".$Value);
 					break;
 				
 			default:
@@ -267,10 +291,7 @@ class IPS2AcerP5530 extends IPSModule
 			/*
 			(
 			    
-			    [bri] => 0 Brightness
-			    [con] => 0 Contrast
-			    [vks] => 0 V. Keystone
-			    [hks] => 0 H. Keystone
+			    
 			    [gam] => 2.2 Gamma
 			    [ctp] => CT1 Color Temp
 			    [mod] => 255 Display Mode
@@ -315,6 +336,18 @@ class IPS2AcerP5530 extends IPSModule
 			}
 			If (GetValueInteger($this->GetIDForIdent("Volume")) <> intval($Data->vol)) {
 				SetValueInteger($this->GetIDForIdent("Volume"), intval($Data->vol));
+			}
+			If (GetValueInteger($this->GetIDForIdent("Brightness")) <> intval($Data->bri)) {
+				SetValueInteger($this->GetIDForIdent("Brightness"), intval($Data->bri));
+			}
+			If (GetValueInteger($this->GetIDForIdent("Contrast")) <> intval($Data->con)) {
+				SetValueInteger($this->GetIDForIdent("Contrast"), intval($Data->con));
+			}
+			If (GetValueInteger($this->GetIDForIdent("VKeystone")) <> intval($Data->vks)) {
+				SetValueInteger($this->GetIDForIdent("VKeystone"), intval($Data->vks));
+			}
+			If (GetValueInteger($this->GetIDForIdent("HKeystone")) <> intval($Data->hks)) {
+				SetValueInteger($this->GetIDForIdent("HKeystone"), intval($Data->hks));
 			}
 		}
 		else {
