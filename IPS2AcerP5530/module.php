@@ -39,6 +39,13 @@ class IPS2AcerP5530 extends IPSModule
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.DisplayMode", 3, "Video", "TV", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.DisplayMode", 20, "User", "TV", -1);
 		
+		$this->RegisterProfileInteger("IPS2AcerP5530.AspectRatio", "TV", "", "", 0, 1, 0);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.AspectRatio", 0, "Auto", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.AspectRatio", 1, "Full", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.AspectRatio", 2, "4:3", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.AspectRatio", 3, "16:9", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.AspectRatio", 20, "L.Box", "TV", -1);
+		
 		
 		
 		$this->RegisterProfileInteger("IPS2AcerP5530.Volume", "Speaker", "", "", 0, 100, 5);
