@@ -122,63 +122,7 @@ class IPS2AcerP5530 extends IPSModule
 			}	   
 		}
 	}
-	
-	public function ReceiveData($JSONString) 
-	{
- 	    	SetValueInteger($this->GetIDForIdent("LastKeepAlive"), time() );
-		// Empfangene Daten vom I/O
-		$Data = json_decode($JSONString);
-		$Message = utf8_decode($Data->Buffer);
-		
-		// Entfernen der Steuerzeichen
-		$Message = trim($Message, "\x00..\x1F");
-		
-		$LastMessage = $this->GetBuffer("LastMessage");
-		$this->SendDebug("ReceiveData", "Letze Message: ".$LastMessage." Antwort: ".$Message, 0);
-		
-		$MessageParts = explode(chr(13), $Message);
-		
-		foreach ($MessageParts as $Message) {
-			// Entfernen der Steuerzeichen
-			$Message = trim($Message, "\x00..\x1F");
-			$this->SendDebug("ReceiveData", $Message, 0);
-		
-			switch($Message) {
-				case "LAMP 0":
-					If (GetValueBoolean($this->GetIDForIdent("Power")) == true) {
-						SetValueBoolean($this->GetIDForIdent("Power"), false);
-					}
-					break;
-				case "LAMP 1":
-					If (GetValueBoolean($this->GetIDForIdent("Power")) == false) {
-						SetValueBoolean($this->GetIDForIdent("Power"), true);
-						$this->GetData();
-					}
-					break;
-				case "ECO 0":
-					SetValueBoolean($this->GetIDForIdent("ECO"), false);
-					break;
-				case "ECO 1":
-					SetValueBoolean($this->GetIDForIdent("ECO"), true);
-					break;
-				case preg_match('/Model.*/', $Message) ? $Message : !$Message:
-					SetValueString($this->GetIDForIdent("Model"), substr($Message, 6, -4));
-					break;
-				case preg_match('/Name.*/', $Message) ? $Message : !$Message:
-					SetValueString($this->GetIDForIdent("Name"), substr($Message, 5));
-					break;
-				case preg_match('/Res.*/', $Message) ? $Message : !$Message:
-					SetValueString($this->GetIDForIdent("Res"), substr($Message, 4));
-					break;
-				case "*000":
-					$this->SendDebug("ReceiveData", "Abfrage erfolgreich!", 0);
-					break;
-				case "*001":
-					$this->SendDebug("ReceiveData", "Abfrage aktuell nicht moeglich!", 0);
-					break;
-			}
-		}
-	}
+
 	
 	public function RequestAction($Ident, $Value) 
 	{
