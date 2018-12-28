@@ -24,7 +24,7 @@ class IPS2AcerP5530 extends IPSModule
 		$this->RegisterProfileInteger("IPS2AcerP5530.Source", "TV", "", "", 0, 1, 0);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 3, "HDMI 1", "TV", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 6, "HDMI 2/MHL", "TV", -1);
-		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 20, "VGA IN 1", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 20, "VGA IN 1", "TV", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 21, "VGA IN 2", "TV", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 22, "Video", "TV", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 33, "LAN/Wifi", "TV", -1);
