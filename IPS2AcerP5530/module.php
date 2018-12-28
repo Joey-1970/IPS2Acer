@@ -116,14 +116,17 @@ class IPS2AcerP5530 extends IPSModule
 						$this->WakeOnLAN();
 					}
 					else {
-						//$this->SetData("* 0 IR 002");
+						$this->SetcURLData("pwr=pwr");
 					}
 					break;
 				case "ECO":
-					
+						$this->SetcURLData("eco=eco");
 					break;
 				case "Freeze":
-					
+						$this->SetcURLData("frz=frz");
+					break;
+				case "Source":
+						$this->SetcURLData("src=".$Value);
 					break;
 				
 			default:
@@ -170,14 +173,50 @@ class IPS2AcerP5530 extends IPSModule
     		}
 	}
 	
-	private function SetData(String $Message)
+	private function SetcURLData(String $Message)
 	{
 		If ($this->ReadPropertyBoolean("Open") == true) {
-			$this->SendDebug("SetData", "Message: ".$Message, 0);
-			$this->SetBuffer("LastMessage", $Message);
-			$Message = $Message.chr(13);
-			//$Result = $this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => utf8_encode($Message))));
-			IPS_Sleep(300);
+			$this->SendDebug("SetcURLData", "Message: ".$Message, 0);
+			
+			$User = $this->ReadPropertyString("User");;
+			$Password = $this->ReadPropertyString("Password");
+			$IPAddress = $this->ReadPropertyString("IPAddress");
+			$URL = "http://".$IPAddress."/form/control_cgi";
+			
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				"User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1",
+				"Accept: */*",
+				"Accept-Language: en-us,en;q=0.5",
+				"Accept-Encoding: gzip, deflate",
+				"Connection: keep-alive",
+					"Content-type: application/x-www-form-urlencoded",
+			));
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");  
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_URL, $URL);
+			curl_setopt($ch, CURLOPT_USERPWD, "$User:$Password");
+			curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+			curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $Message);
+			$Response = curl_exec($ch);
+			/*
+			if(!curl_exec($ch)){
+			    die('Error: "' . curl_error($ch) . '" - Code: ' . curl_errno($ch));
+			}
+			*/
+			curl_close($ch);
+			If ($Response <> Null) {
+				$this->SetVariables($Response);
+			}
+			else {
+				SetValueBoolean($this->GetIDForIdent("Power"), false);
+				
+				// restliche Statusvariablen disablen!
+			}
+			
 		}
 	}
 	
@@ -210,30 +249,8 @@ class IPS2AcerP5530 extends IPSModule
 			$Response = curl_exec($ch);
 			curl_close($ch);
 			
-			// Anführungszeichen der Keys ergänzen
-			$Response = preg_replace('/("(.*?)"|(\w+))(\s*:\s*)\+?(0+(?=\d))?(".*?"|.)/s', '"$2$3"$4$6', $Response);
-			// HTML-Tags entfernen
-			$Response = strip_tags($Response);
-			$Data = json_decode($Response);
-			
 			If ($Response <> Null) {
-				SetValueInteger($this->GetIDForIdent("LastKeepAlive"), time() );
-				
-				If (GetValueBoolean($this->GetIDForIdent("Power")) <> boolval($Data->pwr)) {
-					SetValueBoolean($this->GetIDForIdent("Power"), boolval($Data->pwr));
-				}
-				If (GetValueBoolean($this->GetIDForIdent("Freeze")) <> boolval($Data->frz)) {
-					SetValueBoolean($this->GetIDForIdent("Freeze"), boolval($Data->frz));
-				}
-				If (GetValueBoolean($this->GetIDForIdent("Hide")) <> boolval($Data->hid)) {
-					SetValueBoolean($this->GetIDForIdent("Hide"), boolval($Data->hid));
-				}
-				If (GetValueBoolean($this->GetIDForIdent("ECO")) <> boolval($Data->eco)) {
-					SetValueBoolean($this->GetIDForIdent("ECO"), boolval($Data->eco));
-				}
-				If (GetValueInteger($this->GetIDForIdent("Source")) <> intval($Data->src)) {
-					SetValueInteger($this->GetIDForIdent("Source"), intval($Data->src));
-				}
+				$this->SetVariables($Response);
 			}
 			else {
 				SetValueBoolean($this->GetIDForIdent("Power"), false);
@@ -267,6 +284,40 @@ class IPS2AcerP5530 extends IPSModule
 			*/
 
 			//echo $json->pwr;
+		}
+	}
+	
+	private function SetVariables($Message)
+	{
+		// Anführungszeichen der Keys ergänzen
+		$Response = preg_replace('/("(.*?)"|(\w+))(\s*:\s*)\+?(0+(?=\d))?(".*?"|.)/s', '"$2$3"$4$6', $Message);
+		// HTML-Tags entfernen
+		$Response = strip_tags($Response);
+		$Data = json_decode($Response);
+
+		If ($Response <> Null) {
+			SetValueInteger($this->GetIDForIdent("LastKeepAlive"), time() );
+
+			If (GetValueBoolean($this->GetIDForIdent("Power")) <> boolval($Data->pwr)) {
+				SetValueBoolean($this->GetIDForIdent("Power"), boolval($Data->pwr));
+			}
+			If (GetValueBoolean($this->GetIDForIdent("Freeze")) <> boolval($Data->frz)) {
+				SetValueBoolean($this->GetIDForIdent("Freeze"), boolval($Data->frz));
+			}
+			If (GetValueBoolean($this->GetIDForIdent("Hide")) <> boolval($Data->hid)) {
+				SetValueBoolean($this->GetIDForIdent("Hide"), boolval($Data->hid));
+			}
+			If (GetValueBoolean($this->GetIDForIdent("ECO")) <> boolval($Data->eco)) {
+				SetValueBoolean($this->GetIDForIdent("ECO"), boolval($Data->eco));
+			}
+			If (GetValueInteger($this->GetIDForIdent("Source")) <> intval($Data->src)) {
+				SetValueInteger($this->GetIDForIdent("Source"), intval($Data->src));
+			}
+		}
+		else {
+			SetValueBoolean($this->GetIDForIdent("Power"), false);
+
+			// restliche Statusvariablen disablen!
 		}
 	}
 	
