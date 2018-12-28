@@ -32,15 +32,11 @@ class IPS2AcerP5530 extends IPSModule
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 35, "USB Display", "TV", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 36, "Mirroring Display", "TV", -1);
 		
-		
+		$this->RegisterProfileInteger("IPS2AcerP5530.Volume", "Speaker", "", "", 0, 100, 5);
 
 		// Statusvariablen anlegen
 		$this->RegisterVariableInteger("LastKeepAlive", "Letztes Keep Alive", "~UnixTimestamp", 10);
 		$this->DisableAction("LastKeepAlive");
-		
-		$this->RegisterVariableString("Name", "Name", "", 20);
-		$this->RegisterVariableString("Model", "Model", "", 30);
-		$this->RegisterVariableString("Res", "Resolution", "", 40);
 		
 		$this->RegisterVariableBoolean("Power", "Power", "~Switch", 50);
 		$this->EnableAction("Power");
@@ -56,6 +52,9 @@ class IPS2AcerP5530 extends IPSModule
 		
 		$this->RegisterVariableInteger("Source", "Source", "IPS2AcerP5530.Source", 90);
 		$this->EnableAction("Source");
+		
+		$this->RegisterVariableInteger("Volume", "Volume", "IPS2AcerP5530.Volume", 100);
+		$this->EnableAction("Volume");
 	}
 	
 	public function GetConfigurationForm() { 
@@ -122,11 +121,17 @@ class IPS2AcerP5530 extends IPSModule
 				case "ECO":
 						$this->SetcURLData("eco=eco");
 					break;
+				case "Hide":
+						$this->SetcURLData("hid=hid");
+					break;
 				case "Freeze":
 						$this->SetcURLData("frz=frz");
 					break;
 				case "Source":
 						$this->SetcURLData("src=".$Value);
+					break;
+				case "Volume":
+						$this->SetcURLData("vol=".$Value);
 					break;
 				
 			default:
@@ -261,11 +266,7 @@ class IPS2AcerP5530 extends IPSModule
 			//print_r($json);
 			/*
 			(
-			    [pwr] => 1  Power Bool
-			    [hid] => 0 Hide Bool
-			    [frz] => 0 Freeze
-			    [eco] => 0 ECO
-			    [src] => 6 Source
+			    
 			    [bri] => 0 Brightness
 			    [con] => 0 Contrast
 			    [vks] => 0 V. Keystone
@@ -273,7 +274,6 @@ class IPS2AcerP5530 extends IPSModule
 			    [gam] => 2.2 Gamma
 			    [ctp] => CT1 Color Temp
 			    [mod] => 255 Display Mode
-			    [vol] => 20 Volume
 			    [apr] => 255 Aspect Ratio
 			    [zom] => 1.0 Digital Zoom
 			    [prj] => 0 Projection
@@ -312,6 +312,9 @@ class IPS2AcerP5530 extends IPSModule
 			}
 			If (GetValueInteger($this->GetIDForIdent("Source")) <> intval($Data->src)) {
 				SetValueInteger($this->GetIDForIdent("Source"), intval($Data->src));
+			}
+			If (GetValueInteger($this->GetIDForIdent("Volume")) <> intval($Data->vol)) {
+				SetValueInteger($this->GetIDForIdent("Volume"), intval($Data->vol));
 			}
 		}
 		else {
