@@ -18,7 +18,7 @@ class IPS2AcerP5530 extends IPSModule
 		$this->RegisterPropertyString("MAC", "00:00:00:00:00:00");
 		$this->RegisterPropertyString("User", "User");
 	    	$this->RegisterPropertyString("Password", "Passwort");
-		$this->RegisterTimer("State", 0, 'IPS2AcerP5530_State($_IPS["TARGET"]);');
+		$this->RegisterTimer("State", 0, 'IPS2AcerP5530_GetcURLData($_IPS["TARGET"]);');
 		
 		// Profile anlegen
 		$this->RegisterProfileInteger("IPS2AcerP5530.Source", "TV", "", "", 0, 1, 0);
@@ -165,30 +165,13 @@ class IPS2AcerP5530 extends IPSModule
     		}
 	}
 	
-	public function State()
-	{
-		If ($this->ReadPropertyBoolean("Open") == true) {
-			$Message = "* 0 Lamp ?".chr(13);
-			$Result = $this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => utf8_encode($Message))));
-			If (GetValueBoolean($this->GetIDForIdent("Power")) == true) {
-				$MessageArray = array("* 0 Src ?", "* 0 IR 052", "* 0 IR 073", "* 0 Lamp");
-				foreach ($MessageArray as $Value) {
-					$Message = $Value.chr(13);
-					$this->SetBuffer("LastMessage", $Value);
-					$Result = $this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => utf8_encode($Message))));
-					IPS_Sleep(300);
-				}
-			}
-		}
-	}
-	
 	private function SetData(String $Message)
 	{
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->SendDebug("SetData", "Message: ".$Message, 0);
 			$this->SetBuffer("LastMessage", $Message);
 			$Message = $Message.chr(13);
-			$Result = $this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => utf8_encode($Message))));
+			//$Result = $this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => utf8_encode($Message))));
 			IPS_Sleep(300);
 		}
 	}
@@ -197,13 +180,8 @@ class IPS2AcerP5530 extends IPSModule
 	{
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->SendDebug("GetData", "Ausfuehrung", 0);
-			$MessageArray = array("* 0 Lamp ?", "* 0 Src ?", "* 0 IR 035", "* 0 IR 036", "* 0 IR 037", "* 0 IR 052", "* 0 IR 073", "* 0 Lamp");
-			foreach ($MessageArray as $Value) {
-				$Message = $Value.chr(13);
-				$this->SetBuffer("LastMessage", $Value);
-				$Result = $this->SendDataToParent(json_encode(Array("DataID" => "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}", "Buffer" => utf8_encode($Message))));
-				IPS_Sleep(300);
-			}
+			$this->GetcURLData();
+			// weitere Daten abholen
 		}
 	}
 	
@@ -227,12 +205,15 @@ class IPS2AcerP5530 extends IPSModule
 			$Response = curl_exec($ch);
 			curl_close($ch);
 			
-			
+			// Anführungszeichen der Keys ergänzen
 			$Response = preg_replace('/("(.*?)"|(\w+))(\s*:\s*)\+?(0+(?=\d))?(".*?"|.)/s', '"$2$3"$4$6', $Response);
+			// HTML-Tags entfernen
 			$Response = strip_tags($Response);
 			$Data = json_decode($Response);
 			
 			If ($output <> Null) {
+				SetValueInteger($this->GetIDForIdent("LastKeepAlive"), time() );
+				
 				If (GetValueBoolean($this->GetIDForIdent("Power")) <> boolval($Data->pwr)) {
 					SetValueBoolean($this->GetIDForIdent("Power"), boolval($Data->pwr));
 				}
@@ -250,9 +231,8 @@ class IPS2AcerP5530 extends IPSModule
 				}
 			}
 			else {
-				If (GetValueBoolean($this->GetIDForIdent("Power")) <> boolval($Data->pwr)) {
-					SetValueBoolean($this->GetIDForIdent("Power"), false);
-				}
+				SetValueBoolean($this->GetIDForIdent("Power"), false);
+				
 				// restliche Statusvariablen disablen!
 			}
 			
