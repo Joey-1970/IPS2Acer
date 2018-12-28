@@ -16,16 +16,26 @@ class IPS2AcerP5530 extends IPSModule
            	$this->RequireParent("{3CFF0FD9-E306-41DB-9B5A-9D06D38576C3}");
 		$this->RegisterPropertyBoolean("Open", false);
 	    	$this->RegisterPropertyString("IPAddress", "127.0.0.1");
-		$this->RegisterPropertyInteger("Port", 0);
+		$this->RegisterPropertyString("User", "User");
+	    	$this->RegisterPropertyString("Password", "Passwort");
 		$this->RegisterTimer("State", 0, 'IPS2AcerP5530_State($_IPS["TARGET"]);');
 		
 		// Profile anlegen
 		$this->RegisterProfileInteger("IPS2AcerP5530.Source", "TV", "", "", 0, 1, 0);
-		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 0, "HDMI 1", "TV", -1);
-		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 1, "HDMI 2", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 3, "HDMI 1", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 6, "HDMI 2/MHL", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 20, "VGA IN 1", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 21, "VGA IN 2", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 22, "Video", "TV", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 2, "Media", "TV", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 3, "USB Display", "TV", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 4, "Analog RGB for D-Sub", "TV", -1);
+		
+		
+			 		          <option value="33" -1>LAN/WiFi</option>
+			 		          <option value="34" -1>Media</option>
+			 		          <option value="35" -1>USB Display</option>
+			 		          <option value="36" -1>Mirroring Display</option>
 		
 		$this->RegisterProfileInteger("IPS2AcerP5530.Control", "Move", "", "", 0, 1, 0);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Control", 0, "Left", "Move", -1);
