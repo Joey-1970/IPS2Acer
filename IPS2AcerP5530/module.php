@@ -50,6 +50,10 @@ class IPS2AcerP5530 extends IPSModule
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Projection", 0, "Front Table", "TV", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Projection", 1, "Rear Table", "TV", -1);
 		
+		$this->RegisterProfileInteger("IPS2AcerP5530.StartupScreen", "TV", "", "", 0, 1, 0);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.StartupScreen", 0, "Acer", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.StartupScreen", 1, "User", "TV", -1);
+		
 		
 		$this->RegisterProfileInteger("IPS2AcerP5530.Volume", "Speaker", "", "", 0, 100, 5);
 
