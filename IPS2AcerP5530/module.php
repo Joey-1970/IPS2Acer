@@ -32,6 +32,15 @@ class IPS2AcerP5530 extends IPSModule
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 35, "USB Display", "TV", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Source", 36, "Mirroring Display", "TV", -1);
 		
+		$this->RegisterProfileInteger("IPS2AcerP5530.DisplayMode", "TV", "", "", 0, 1, 0);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.DisplayMode", 0, "Bright", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.DisplayMode", 1, "Presentation", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.DisplayMode", 2, "Standard", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.DisplayMode", 3, "Video", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.DisplayMode", 20, "User", "TV", -1);
+		
+		
+		
 		$this->RegisterProfileInteger("IPS2AcerP5530.Volume", "Speaker", "", "", 0, 100, 5);
 
 		// Statusvariablen anlegen
