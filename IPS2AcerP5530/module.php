@@ -106,7 +106,10 @@ class IPS2AcerP5530 extends IPSModule
 	
 	public function RequestAction($Ident, $Value) 
 	{
-  		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
+  		If (($Ident == "Power") AND ($Value == true)) {
+			$this->WakeOnLAN();
+		}
+		elseIf (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
 			switch($Ident) {
 				case "Power":
 					If ($Value == true) {
