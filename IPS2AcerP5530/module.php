@@ -93,7 +93,7 @@ class IPS2AcerP5530 extends IPSModule
 		$this->RegisterVariableInteger("VKeystone", "V.-Keystone", "IPS2AcerP5530.VKeystone", 130);
 		$this->EnableAction("VKeystone");
 		
-		$this->RegisterVariableInteger("HKeystone", "H.-Keystone", "HKeystone", 140);
+		$this->RegisterVariableInteger("HKeystone", "H.-Keystone", "IPS2AcerP5530.HKeystone", 140);
 		$this->EnableAction("HKeystone");
 	}
 	
