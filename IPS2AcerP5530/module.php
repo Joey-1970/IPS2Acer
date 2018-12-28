@@ -135,7 +135,7 @@ class IPS2AcerP5530 extends IPSModule
 	
 	private function WakeOnLAN()
 	{
-    		$mc = $this->ReadPropertyString("MAC");
+    		$mac = $this->ReadPropertyString("MAC");
 		$broadcast = "255.255.255.255";
 		$mac_array = preg_split('#:#', $mac);
     		$hwaddr = '';
