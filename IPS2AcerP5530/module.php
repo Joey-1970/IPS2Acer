@@ -15,6 +15,7 @@ class IPS2AcerP5530 extends IPSModule
             	parent::Create();
 		$this->RegisterPropertyBoolean("Open", false);
 	    	$this->RegisterPropertyString("IPAddress", "127.0.0.1");
+		$this->RegisterPropertyString("MAC", "00:00:00:00:00:00");
 		$this->RegisterPropertyString("User", "User");
 	    	$this->RegisterPropertyString("Password", "Passwort");
 		$this->RegisterTimer("State", 0, 'IPS2AcerP5530_State($_IPS["TARGET"]);');
@@ -82,32 +83,6 @@ class IPS2AcerP5530 extends IPSModule
 		parent::ApplyChanges();
 		
 		If (IPS_GetKernelRunlevel() == 10103) {
-			$ParentID = $this->GetParentID();
-			If ($ParentID > 0) {
-				If (IPS_GetProperty($ParentID, 'Host') <> $this->ReadPropertyString('IPAddress')) {
-		                	IPS_SetProperty($ParentID, 'Host', $this->ReadPropertyString('IPAddress'));
-				}
-				If (IPS_GetProperty($ParentID, 'Port') <> $this->ReadPropertyInteger('Port')) {
-		                	IPS_SetProperty($ParentID, 'Port', $this->ReadPropertyInteger('Port'));
-				}
-				If (IPS_GetProperty($ParentID, 'Open') <> $this->ReadPropertyBoolean("Open")) {
-		                	IPS_SetProperty($ParentID, 'Open', $this->ReadPropertyBoolean("Open"));
-				}
-				If (IPS_GetName($ParentID) == "Client Socket") {
-		                	IPS_SetName($ParentID, "IPS2Acer5530");
-				}
-				if(IPS_HasChanges($ParentID))
-				{
-				    	$Result = @IPS_ApplyChanges($ParentID);
-					If ($Result) {
-						$this->SendDebug("ApplyChanges", "Einrichtung des Client Socket erfolgreich", 0);
-					}
-					else {
-						$this->SendDebug("ApplyChanges", "Einrichtung des Client Socket nicht erfolgreich!", 0);
-					}
-				}
-			}
-			
 			If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
 				
 				$this->SetStatus(102);
@@ -173,6 +148,41 @@ class IPS2AcerP5530 extends IPSModule
 			}
 	    	}
 		
+	}
+	
+	private function wol($broadcast, $mac)
+	{
+    		$mac_array = preg_split('#:#', $mac);
+    		$hwaddr = '';
+
+    		foreach($mac_array AS $octet)
+    		{
+        		$hwaddr .= chr(hexdec($octet));
+    		}
+
+    		// Create Magic Packet
+    		$packet = '';
+    		for ($i = 1; $i <= 6; $i++)
+    		{
+        		$packet .= chr(255);
+    		}
+
+    		for ($i = 1; $i <= 16; $i++)
+    		{
+        		$packet .= $hwaddr;
+    		}
+
+    		$sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+    		if ($sock)
+    		{
+        		$options = socket_set_option($sock, SOL_SOCKET, SO_BROADCAST, true);
+
+        		if ($options >=0) 
+        		{    
+            			$e = socket_sendto($sock, $packet, strlen($packet), 0, $broadcast, 7);
+            			socket_close($sock);
+        		}    
+    		}
 	}
 	
 	public function State()
