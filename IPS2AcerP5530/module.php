@@ -201,7 +201,7 @@ class IPS2AcerP5530 extends IPSModule
 			$URL = "http://".$IPAddress."/form/control_cgi";
 
 			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $URLl);
+			curl_setopt($ch, CURLOPT_URL, $URL);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_USERPWD, "$User:$Password");
 			curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -216,7 +216,7 @@ class IPS2AcerP5530 extends IPSModule
 			$Response = strip_tags($Response);
 			$Data = json_decode($Response);
 			
-			If ($output <> Null) {
+			If ($Response <> Null) {
 				SetValueInteger($this->GetIDForIdent("LastKeepAlive"), time() );
 				
 				If (GetValueBoolean($this->GetIDForIdent("Power")) <> boolval($Data->pwr)) {
