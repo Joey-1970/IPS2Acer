@@ -115,20 +115,10 @@ class IPS2AcerP5530 extends IPSModule
 					}
 					break;
 				case "ECO":
-					If ($Value == true) {
-						//$this->SetData("* 0 IR 051");
-					}
-					else {
-						//$this->SetData("* 0 IR 055");
-					}
+					
 					break;
 				case "Freeze":
-					If ($Value == true) {
-						//$this->SetData("* 0 IR 051");
-					}
-					else {
-						//$this->SetData("* 0 IR 055");
-					}
+					
 					break;
 				
 			default:
@@ -221,24 +211,51 @@ class IPS2AcerP5530 extends IPSModule
 	{
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->SendDebug("GetcURLData", "Ausfuehrung", 0);
-			$username = "Administrator";
-			$password = "admin";
-			$url = "http://192.168.178.21/form/control_cgi";
+			
+			$User = $this->ReadPropertyString("User");;
+			$Password = $this->ReadPropertyString("Password");
+			$IPAddress = $this->ReadPropertyString("IPAddress");
+			$URL = "http://".$IPAddress."/form/control_cgi";
 
 			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_URL, $URLl);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_USERPWD, "$username:$password");
+			curl_setopt($ch, CURLOPT_USERPWD, "$User:$Password");
 			curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
 			curl_setopt($ch, CURLOPT_TIMEOUT, 2);
-			$output = curl_exec($ch);
+			$Response = curl_exec($ch);
 			curl_close($ch);
 			
 			
-			$output = preg_replace('/("(.*?)"|(\w+))(\s*:\s*)\+?(0+(?=\d))?(".*?"|.)/s', '"$2$3"$4$6', $output);
-			$output = strip_tags($output);
-			$json = json_decode($output);
+			$Response = preg_replace('/("(.*?)"|(\w+))(\s*:\s*)\+?(0+(?=\d))?(".*?"|.)/s', '"$2$3"$4$6', $Response);
+			$Response = strip_tags($Response);
+			$Data = json_decode($Response);
+			
+			If ($output <> Null) {
+				If (GetValueBoolean($this->GetIDForIdent("Power")) <> boolval($Data->pwr)) {
+					SetValueBoolean($this->GetIDForIdent("Power"), boolval($Data->pwr));
+				}
+				If (GetValueBoolean($this->GetIDForIdent("Freeze")) <> boolval($Data->frz)) {
+					SetValueBoolean($this->GetIDForIdent("Freeze"), boolval($Data->frz));
+				}
+				If (GetValueBoolean($this->GetIDForIdent("Hide")) <> boolval($Data->hid)) {
+					SetValueBoolean($this->GetIDForIdent("Hide"), boolval($Data->hid));
+				}
+				If (GetValueBoolean($this->GetIDForIdent("ECO")) <> boolval($Data->eco)) {
+					SetValueBoolean($this->GetIDForIdent("ECO"), boolval($Data->eco));
+				}
+				If (GetValueInteger($this->GetIDForIdent("Source")) <> intval($Data->src)) {
+					SetValueInteger($this->GetIDForIdent("Source"), intval($Data->src));
+				}
+			}
+			else {
+				If (GetValueBoolean($this->GetIDForIdent("Power")) <> boolval($Data->pwr)) {
+					SetValueBoolean($this->GetIDForIdent("Power"), false);
+				}
+				// restliche Statusvariablen disablen!
+			}
+			
 			//print_r($json);
 			/*
 			(
