@@ -108,44 +108,29 @@ class IPS2AcerP5530 extends IPSModule
 			switch($Ident) {
 				case "Power":
 					If ($Value == true) {
-						$this->SetData("OKOKOKOKOK");
-						$this->SetData("* 0 IR 001");
+						$this->WakeOnLAN();
 					}
 					else {
-						$this->SetData("* 0 IR 002");
+						//$this->SetData("* 0 IR 002");
 					}
 					break;
 				case "ECO":
 					If ($Value == true) {
-						$this->SetData("* 0 IR 051");
+						//$this->SetData("* 0 IR 051");
 					}
 					else {
-						$this->SetData("* 0 IR 055");
+						//$this->SetData("* 0 IR 055");
 					}
 					break;
-				case "Control":
-					SetValueInteger($this->GetIDForIdent("Control"), $Value);
-					If ($Value == 0) {
-						// Left
-						$this->SetData("* 0 IR 012");
+				case "Freeze":
+					If ($Value == true) {
+						//$this->SetData("* 0 IR 051");
 					}
-					else If ($Value == 1) {
-						// Up
-						$this->SetData("* 0 IR 009");
-					}
-					else If ($Value == 2) {
-						// Enter
-						$this->SetData("* 0 IR 013");
-					}
-					else If ($Value == 3) {
-						// Down
-						$this->SetData("* 0 IR 010");
-					}
-					else If ($Value == 4) {
-						// Down
-						$this->SetData("* 0 IR 011");
+					else {
+						//$this->SetData("* 0 IR 055");
 					}
 					break;
+				
 			default:
 				    throw new Exception("Invalid Ident");
 			}
@@ -153,9 +138,11 @@ class IPS2AcerP5530 extends IPSModule
 		
 	}
 	
-	private function wol($broadcast, $mac)
+	private function WakeOnLAN()
 	{
-    		$mac_array = preg_split('#:#', $mac);
+    		$mc = $this->ReadPropertyString("MAC");
+		$broadcast = "255.255.255.255";
+		$mac_array = preg_split('#:#', $mac);
     		$hwaddr = '';
 
     		foreach($mac_array AS $octet)
