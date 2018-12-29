@@ -373,8 +373,8 @@ class IPS2AcerP5530 extends IPSModule
 			$StatusArray[4] = "V.-Keystone: ".intval($Data->vks);
 			$StatusArray[5] = "H.-Keystone: ".intval($Data->hks);
 			$StatusArray[6] = "Gamma: ".floatval($Data->gam);
-			$StatusArray[7] = "Color Temp: ".$Data->ctp);
-			$StatusArray[7] = "Digital Zoom: ".floatval($Data->zom));
+			$StatusArray[7] = "Color Temp: ".$Data->ctp;
+			$StatusArray[7] = "Digital Zoom: ".floatval($Data->zom);
 			$this->SetStatusData($StatusArray);
 			If (GetValueInteger($this->GetIDForIdent("DisplayMode")) <> intval($Data->mod)) {
 				SetValueInteger($this->GetIDForIdent("DisplayMode"), intval($Data->mod));
