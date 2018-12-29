@@ -58,13 +58,7 @@ class IPS2AcerP5530 extends IPSModule
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Parameter", 0, "-", "Shutter", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Parameter", 1, "+", "Shutter", -1);
 		
-		$this->RegisterProfileInteger("IPS2AcerP5530.Volume", "Speaker", "", "", 0, 100, 5);
-		$this->RegisterProfileInteger("IPS2AcerP5530.Brightness", "Speaker", "", "", 0, 100, 1);
-		$this->RegisterProfileInteger("IPS2AcerP5530.Contrast", "Speaker", "", "", 0, 100, 1);
-		$this->RegisterProfileInteger("IPS2AcerP5530.VKeystone", "Speaker", "", "", -20, +20, 1);
-		$this->RegisterProfileInteger("IPS2AcerP5530.HKeystone", "Speaker", "", "", -20, +20, 1);
-
-
+	
 		// Statusvariablen anlegen
 		$this->RegisterVariableInteger("LastKeepAlive", "Letztes Keep Alive", "~UnixTimestamp", 10);
 		$this->DisableAction("LastKeepAlive");
@@ -84,20 +78,46 @@ class IPS2AcerP5530 extends IPSModule
 		$this->RegisterVariableInteger("Source", "Source", "IPS2AcerP5530.Source", 90);
 		$this->EnableAction("Source");
 		
-		$this->RegisterVariableInteger("Volume", "Volume", "IPS2AcerP5530.Volume", 100);
+		$this->RegisterVariableString("Status", "Status", "~TextBox", 95);
+		
+		$this->RegisterVariableInteger("Volume", "Volume", "IPS2AcerP5530.Parameter", 100);
 		$this->EnableAction("Volume");
 		
-		$this->RegisterVariableInteger("Brightness", "Brightness", "IPS2AcerP5530.Brightness", 110);
+		$this->RegisterVariableInteger("Brightness", "Brightness", "IPS2AcerP5530.Parameter", 110);
 		$this->EnableAction("Brightness");
 		
-		$this->RegisterVariableInteger("Contrast", "Contrast", "IPS2AcerP5530.Contrast", 120);
+		$this->RegisterVariableInteger("Contrast", "Contrast", "IPS2AcerP5530.Parameter", 120);
 		$this->EnableAction("Contrast");
 		
-		$this->RegisterVariableInteger("VKeystone", "V.-Keystone", "IPS2AcerP5530.VKeystone", 130);
+		$this->RegisterVariableInteger("VKeystone", "V.-Keystone", "IPS2AcerP5530.Parameter", 130);
 		$this->EnableAction("VKeystone");
 		
-		$this->RegisterVariableInteger("HKeystone", "H.-Keystone", "IPS2AcerP5530.HKeystone", 140);
+		$this->RegisterVariableInteger("HKeystone", "H.-Keystone", "IPS2AcerP5530.Parameter", 140);
 		$this->EnableAction("HKeystone");
+		
+		$this->RegisterVariableInteger("Gamma", "Gamma", "IPS2AcerP5530.Parameter", 150);
+		$this->EnableAction("Gamma");
+		
+		$this->RegisterVariableInteger("ColorTemp", "Color Temp", "IPS2AcerP5530.Parameter", 160);
+		$this->EnableAction("ColorTemp");
+		
+		$this->RegisterVariableInteger("DisplayMode", "Display Mode", "IPS2AcerP5530.DisplayMode", 170);
+		$this->EnableAction("DisplayMode");
+		
+		$this->RegisterVariableBoolean("AutoKeystone", "Auto Keystone", "~Switch", 180);
+		$this->EnableAction("AutoKeystone");
+		
+		$this->RegisterVariableInteger("AspectRatio", "Aspect Ratio", "IPS2AcerP5530.AspectRatio", 190);
+		$this->EnableAction("AspectRatio");
+		
+		$this->RegisterVariableInteger("DigitalZoom", "Digital Zoom", "IPS2AcerP5530.Parameter", 200);
+		$this->EnableAction("DigitalZoom");
+		
+		$this->RegisterVariableInteger("Projection", "Projection", "IPS2AcerP5530.Projection", 210);
+		$this->EnableAction("Projection");
+		
+		$this->RegisterVariableInteger("StartupScreen", "Startup Screen", "IPS2AcerP5530.StartupScreen", 220);
+		$this->EnableAction("StartupScreen");
 	}
 	
 	public function GetConfigurationForm() { 
