@@ -194,19 +194,76 @@ class IPS2AcerP5530 extends IPSModule
 						$this->SetcURLData("src=".$Value);
 					break;
 				case "Volume":
-						//$this->SetcURLData("vol=".$Value);
+						SetValueInteger($this->GetIDForIdent($Ident), $Value);
+						If ($Value == 0) {
+							$this->SetcURLData("vol1=vol1");
+						}
+						else {
+							$this->SetcURLData("vol2=vol2");
+						}
 					break;
 				case "Brightness":
-						//$this->SetcURLData("bri=".$Value);
+						SetValueInteger($this->GetIDForIdent($Ident), $Value);
+						If ($Value == 0) {
+							$this->SetcURLData("bri1=bri1");
+						}
+						else {
+							$this->SetcURLData("bri2=bri2");
+						}
 					break;
 				case "Contrast":
-						//$this->SetcURLData("con=".$Value);
+						SetValueInteger($this->GetIDForIdent($Ident), $Value);
+						If ($Value == 0) {
+							$this->SetcURLData("con1=con1");
+						}
+						else {
+							$this->SetcURLData("con2=con2");
+						}
 					break;
 				case "VKeystone":
-						//$this->SetcURLData("vks=".$Value);
+						SetValueInteger($this->GetIDForIdent($Ident), $Value);
+						If ($Value == 0) {
+							$this->SetcURLData("vks1=vks1");
+						}
+						else {
+							$this->SetcURLData("vks2=vks2");
+						}
 					break;
 				case "HKeystone":
-						//$this->SetcURLData("hks=".$Value);
+						SetValueInteger($this->GetIDForIdent($Ident), $Value);
+						If ($Value == 0) {
+							$this->SetcURLData("hks1=hks1");
+						}
+						else {
+							$this->SetcURLData("hks2=hks2");
+						}
+					break;
+				case "Gamma":
+						SetValueInteger($this->GetIDForIdent($Ident), $Value);
+						If ($Value == 0) {
+							$this->SetcURLData("gam1=gam1");
+						}
+						else {
+							$this->SetcURLData("gam2=gam2");
+						}
+					break;
+				case "ColorTemp":
+						SetValueInteger($this->GetIDForIdent($Ident), $Value);
+						If ($Value == 0) {
+							$this->SetcURLData("ctp1=ctp1");
+						}
+						else {
+							$this->SetcURLData("ctp2=ctp2");
+						}
+					break;
+				case "DigitalZoom":
+						SetValueInteger($this->GetIDForIdent($Ident), $Value);
+						If ($Value == 0) {
+							$this->SetcURLData("zom1=zom1");
+						}
+						else {
+							$this->SetcURLData("zom2=zom2");
+						}
 					break;
 				
 			default:
