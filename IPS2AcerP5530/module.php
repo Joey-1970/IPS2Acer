@@ -336,24 +336,8 @@ class IPS2AcerP5530 extends IPSModule
 				SetValueBoolean($this->GetIDForIdent("Power"), false);
 				
 				// restliche Statusvariablen disablen!
-			}
-			
-			//print_r($json);
-			/*
-			(
-			    
-			    
-			   
-			   
-			    
-			    [prj] => 0 Projection
-			    [lgo] => 0 Startup Screen
-			    [aks] => 1 Auto Keystone 	
-			    [dyar] => 29
-			)
-			*/
-
-			//echo $json->pwr;
+			}	
+			   // [dyar] => 29
 		}
 	}
 	
@@ -397,6 +381,15 @@ class IPS2AcerP5530 extends IPSModule
 			}
 			If (GetValueInteger($this->GetIDForIdent("AspectRatio")) <> intval($Data->apr)) {
 				SetValueInteger($this->GetIDForIdent("AspectRatio"), intval($Data->apr));
+			}
+			If (GetValueInteger($this->GetIDForIdent("Projection")) <> intval($Data->prj)) {
+				SetValueInteger($this->GetIDForIdent("Projection"), intval($Data->prj));
+			}
+			If (GetValueInteger($this->GetIDForIdent("StartupScreen")) <> intval($Data->lgo)) {
+				SetValueInteger($this->GetIDForIdent("StartupScreen"), intval($Data->lgo));
+			}
+			If (GetValueInteger($this->GetIDForIdent("AutoKeystone")) <> intval($Data->aks)) {
+				SetValueInteger($this->GetIDForIdent("AutoKeystone"), intval($Data->aks));
 			}
 			
 		}
