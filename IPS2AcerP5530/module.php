@@ -194,19 +194,19 @@ class IPS2AcerP5530 extends IPSModule
 						$this->SetcURLData("src=".$Value);
 					break;
 				case "Volume":
-						$this->SetcURLData("vol=".$Value);
+						//$this->SetcURLData("vol=".$Value);
 					break;
 				case "Brightness":
-						$this->SetcURLData("bri=".$Value);
+						//$this->SetcURLData("bri=".$Value);
 					break;
 				case "Contrast":
-						$this->SetcURLData("con=".$Value);
+						//$this->SetcURLData("con=".$Value);
 					break;
 				case "VKeystone":
-						$this->SetcURLData("vks=".$Value);
+						//$this->SetcURLData("vks=".$Value);
 					break;
 				case "HKeystone":
-						$this->SetcURLData("hks=".$Value);
+						//$this->SetcURLData("hks=".$Value);
 					break;
 				
 			default:
@@ -343,11 +343,9 @@ class IPS2AcerP5530 extends IPSModule
 			(
 			    
 			    
-			    [gam] => 2.2 Gamma
-			    [ctp] => CT1 Color Temp
-			    [mod] => 255 Display Mode
-			    [apr] => 255 Aspect Ratio
-			    [zom] => 1.0 Digital Zoom
+			   
+			   
+			    
 			    [prj] => 0 Projection
 			    [lgo] => 0 Startup Screen
 			    [aks] => 1 Auto Keystone 	
@@ -385,21 +383,22 @@ class IPS2AcerP5530 extends IPSModule
 			If (GetValueInteger($this->GetIDForIdent("Source")) <> intval($Data->src)) {
 				SetValueInteger($this->GetIDForIdent("Source"), intval($Data->src));
 			}
-			If (GetValueInteger($this->GetIDForIdent("Volume")) <> intval($Data->vol)) {
-				SetValueInteger($this->GetIDForIdent("Volume"), intval($Data->vol));
+			$StatusArray[1] = "Volume: ".intval($Data->vol);
+			$StatusArray[2] = "Brightness: ".intval($Data->bri);
+			$StatusArray[3] = "Contrast: ".intval($Data->con);
+			$StatusArray[4] = "V.-Keystone: ".intval($Data->vks);
+			$StatusArray[5] = "H.-Keystone: ".intval($Data->hks);
+			$StatusArray[6] = "Gamma: ".floatval($Data->gam);
+			$StatusArray[7] = "Color Temp: ".$Data->ctp);
+			$StatusArray[7] = "Digital Zoom: ".floatval($Data->zom));
+			$this->SetStatusData($StatusArray);
+			If (GetValueInteger($this->GetIDForIdent("DisplayMode")) <> intval($Data->mod)) {
+				SetValueInteger($this->GetIDForIdent("DisplayMode"), intval($Data->mod));
 			}
-			If (GetValueInteger($this->GetIDForIdent("Brightness")) <> intval($Data->bri)) {
-				SetValueInteger($this->GetIDForIdent("Brightness"), intval($Data->bri));
+			If (GetValueInteger($this->GetIDForIdent("AspectRatio")) <> intval($Data->apr)) {
+				SetValueInteger($this->GetIDForIdent("AspectRatio"), intval($Data->apr));
 			}
-			If (GetValueInteger($this->GetIDForIdent("Contrast")) <> intval($Data->con)) {
-				SetValueInteger($this->GetIDForIdent("Contrast"), intval($Data->con));
-			}
-			If (GetValueInteger($this->GetIDForIdent("VKeystone")) <> intval($Data->vks)) {
-				SetValueInteger($this->GetIDForIdent("VKeystone"), intval($Data->vks));
-			}
-			If (GetValueInteger($this->GetIDForIdent("HKeystone")) <> intval($Data->hks)) {
-				SetValueInteger($this->GetIDForIdent("HKeystone"), intval($Data->hks));
-			}
+			
 		}
 		else {
 			SetValueBoolean($this->GetIDForIdent("Power"), false);
@@ -407,6 +406,17 @@ class IPS2AcerP5530 extends IPSModule
 			// restliche Statusvariablen disablen!
 		}
 	}
+	
+	private function SetStatusData($StatusArray)
+	{
+		If ($this->ReadPropertyBoolean("Open") == true) {
+			$Value = "";
+			for ($i = 1; $i <= 8; $i++) {
+				$Value = $Value.$StatusArray[$i].chr(13);
+			}
+			SetValueString($this->GetIDForIdent("Status"), $Value);
+		}
+	} 
 	
 	private function ConnectionTest()
 	{
