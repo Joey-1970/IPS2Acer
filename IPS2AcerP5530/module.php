@@ -265,6 +265,21 @@ class IPS2AcerP5530 extends IPSModule
 							$this->SetcURLData("zom2=zom2");
 						}
 					break;
+				case "DisplayMode":
+						$this->SetcURLData("mod=".$Value);
+					break;
+				case "AutoKeystone":
+						$this->SetcURLData("aks=".$Value);
+					break;
+				case "AspectRatio":
+						$this->SetcURLData("apr=".$Value);
+					break;
+				case "Projection":
+						$this->SetcURLData("prj=".$Value);
+					break;
+				case "StartupScreen":
+						$this->SetcURLData("lgo=".$Value);
+					break;
 				
 			default:
 				    throw new Exception("Invalid Ident");
