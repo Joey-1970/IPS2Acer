@@ -388,10 +388,14 @@ class IPS2AcerP5530 extends IPSModule
 			If (GetValueInteger($this->GetIDForIdent("StartupScreen")) <> intval($Data->lgo)) {
 				SetValueInteger($this->GetIDForIdent("StartupScreen"), intval($Data->lgo));
 			}
-			If (GetValueInteger($this->GetIDForIdent("AutoKeystone")) <> intval($Data->aks)) {
-				SetValueInteger($this->GetIDForIdent("AutoKeystone"), intval($Data->aks));
+			If (GetValueBoolean($this->GetIDForIdent("AutoKeystone")) <> boolval($Data->aks)) {
+				SetValueBoolean($this->GetIDForIdent("AutoKeystone"), boolval($Data->aks));
 			}
 			
+			
+			$StatusArray[8] = "Lamp Hours: ";
+			$StatusArray[9] = "Error Status: ";
+			$this->SetStatusData($StatusArray);
 		}
 		else {
 			SetValueBoolean($this->GetIDForIdent("Power"), false);
@@ -404,7 +408,7 @@ class IPS2AcerP5530 extends IPSModule
 	{
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$Value = "";
-			for ($i = 1; $i <= 8; $i++) {
+			for ($i = 1; $i <= 9; $i++) {
 				$Value = $Value.$StatusArray[$i].chr(13);
 			}
 			SetValueString($this->GetIDForIdent("Status"), $Value);
