@@ -408,7 +408,7 @@ class IPS2AcerP5530 extends IPSModule
 	{
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$Value = "";
-			for ($i = 1; $i <= 9; $i++) {
+			for ($i = 1; $i <= (count($StatusArray) -1); $i++) {
 				$Value = $Value.$StatusArray[$i].chr(13);
 			}
 			SetValueString($this->GetIDForIdent("Status"), $Value);
