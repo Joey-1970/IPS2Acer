@@ -54,6 +54,9 @@ class IPS2AcerP5530 extends IPSModule
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.StartupScreen", 0, "Acer", "TV", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.StartupScreen", 1, "User", "TV", -1);
 		
+		$this->RegisterProfileInteger("IPS2AcerP5530.Parameter", "Shutter", "", "", 0, 1, 0);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Parameter", 0, "-", "Shutter", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Parameter", 1, "+", "Shutter", -1);
 		
 		$this->RegisterProfileInteger("IPS2AcerP5530.Volume", "Speaker", "", "", 0, 100, 5);
 		$this->RegisterProfileInteger("IPS2AcerP5530.Brightness", "Speaker", "", "", 0, 100, 1);
