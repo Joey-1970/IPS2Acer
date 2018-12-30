@@ -501,7 +501,7 @@ class IPS2AcerP5530 extends IPSModule
 	{
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->SendDebug("SetVariablesEnable", "Ausfuehrung", 0);
-			$VariablesArray = array("Hide", "Freeze", "ECO", "Source", "Volume", "Brightness", "Contrast", "VKeystone", "HKeystone", "ColorTemp",
+			$VariablesArray = array("Hide", "Freeze", "ECO", "Source", "Volume", "Brightness", "Contrast", "Gamma", "VKeystone", "HKeystone", "ColorTemp",
 					       "DisplayMode", "AutoKeystone", "AspectRatio", "DigitalZoom", "Projection", "StartupScreen");
 			foreach ($VariablesArray as $Variables) {
 				If ($Enable == true) {
