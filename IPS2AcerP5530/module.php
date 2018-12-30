@@ -428,14 +428,12 @@ class IPS2AcerP5530 extends IPSModule
 				// restliche Statusvariablen disablen!
 			}
 			
-			_decode($Response_home);
-			
 			If ($Response_home <> Null) {
 				// Anführungszeichen der Keys ergänzen
 				$Response_home = preg_replace('/("(.*?)"|(\w+))(\s*:\s*)\+?(0+(?=\d))?(".*?"|.)/s', '"$2$3"$4$6', $Response_home);
 				// HTML-Tags entfernen
 				$Response_home = strip_tags($Response_home);
-				$Data = json
+				$Data = json_decode($Response_home);
 				If (GetValueInteger($this->GetIDForIdent("LampHours")) <> intval($Data->lamphur)) {
 					SetValueInteger($this->GetIDForIdent("LampHours"), intval($Data->lamphur));
 				}
