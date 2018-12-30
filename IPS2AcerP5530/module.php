@@ -58,6 +58,14 @@ class IPS2AcerP5530 extends IPSModule
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Parameter", 0, "-", "Shutter", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Parameter", 1, "+", "Shutter", -1);
 		
+		$this->RegisterProfileInteger("IPS2AcerP5530.ErrorStatus", "Information", "", "", 0, 6, 0);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.ErrorStatus", 0, "Normal", "Information", 0x00FF00);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.ErrorStatus", 1, "Fan Lock", "Alert", 0xFF0000);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.ErrorStatus", 2, "Over Temperature", "Alert", 0xFF0000);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.ErrorStatus", 3, "Thermal Switch Error", "Alert", 0xFF0000);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.ErrorStatus", 4, "Lamp Strike Error", "Alert", 0xFF0000);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.ErrorStatus", 5, "Lamp Auto Off Error", "Alert", 0xFF0000);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.ErrorStatus", 6, "Color Wheel Error", "Alert", 0xFF0000);	
 	
 		// Statusvariablen anlegen
 		$this->RegisterVariableInteger("LastKeepAlive", "Letztes Keep Alive", "~UnixTimestamp", 10);
@@ -120,7 +128,7 @@ class IPS2AcerP5530 extends IPSModule
 		$this->EnableAction("StartupScreen");
 		
 		$this->RegisterVariableInteger("LampHours", "Lamp Hours", "", 230);
-		$this->RegisterVariableInteger("ErrorStatus", "Error Status", "", 240);
+		$this->RegisterVariableInteger("ErrorStatus", "Error Status", "IPS2AcerP5530.ErrorStatus", 240);
 		
 	}
 	
