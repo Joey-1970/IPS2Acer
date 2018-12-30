@@ -75,59 +75,43 @@ class IPS2AcerP5530 extends IPSModule
 		$this->EnableAction("Power");
 		
 		$this->RegisterVariableBoolean("Hide", "Hide", "~Switch", 60);
-		$this->EnableAction("Hide");
 		
 		$this->RegisterVariableBoolean("Freeze", "Freeze", "~Switch", 70);
-		$this->EnableAction("Freeze");
 		
 		$this->RegisterVariableBoolean("ECO", "ECO", "~Switch", 80);
-		$this->EnableAction("ECO");
 		
 		$this->RegisterVariableInteger("Source", "Source", "IPS2AcerP5530.Source", 90);
-		$this->EnableAction("Source");
-		
+
 		$this->RegisterVariableString("Status", "Status", "~TextBox", 95);
 		
 		$this->RegisterVariableInteger("Volume", "Volume", "IPS2AcerP5530.Parameter", 100);
-		$this->EnableAction("Volume");
-		
+				
 		$this->RegisterVariableInteger("Brightness", "Brightness", "IPS2AcerP5530.Parameter", 110);
-		$this->EnableAction("Brightness");
 		
 		$this->RegisterVariableInteger("Contrast", "Contrast", "IPS2AcerP5530.Parameter", 120);
-		$this->EnableAction("Contrast");
 		
 		$this->RegisterVariableInteger("VKeystone", "V.-Keystone", "IPS2AcerP5530.Parameter", 130);
-		$this->EnableAction("VKeystone");
 		
 		$this->RegisterVariableInteger("HKeystone", "H.-Keystone", "IPS2AcerP5530.Parameter", 140);
-		$this->EnableAction("HKeystone");
 		
 		$this->RegisterVariableInteger("Gamma", "Gamma", "IPS2AcerP5530.Parameter", 150);
-		$this->EnableAction("Gamma");
 		
 		$this->RegisterVariableInteger("ColorTemp", "Color Temp", "IPS2AcerP5530.Parameter", 160);
-		$this->EnableAction("ColorTemp");
 		
 		$this->RegisterVariableInteger("DisplayMode", "Display Mode", "IPS2AcerP5530.DisplayMode", 170);
-		$this->EnableAction("DisplayMode");
 		
 		$this->RegisterVariableBoolean("AutoKeystone", "Auto Keystone", "~Switch", 180);
-		$this->EnableAction("AutoKeystone");
 		
 		$this->RegisterVariableInteger("AspectRatio", "Aspect Ratio", "IPS2AcerP5530.AspectRatio", 190);
-		$this->EnableAction("AspectRatio");
 		
 		$this->RegisterVariableInteger("DigitalZoom", "Digital Zoom", "IPS2AcerP5530.Parameter", 200);
-		$this->EnableAction("DigitalZoom");
 		
 		$this->RegisterVariableInteger("Projection", "Projection", "IPS2AcerP5530.Projection", 210);
-		$this->EnableAction("Projection");
 		
 		$this->RegisterVariableInteger("StartupScreen", "Startup Screen", "IPS2AcerP5530.StartupScreen", 220);
-		$this->EnableAction("StartupScreen");
 		
 		$this->RegisterVariableInteger("LampHours", "Lamp Hours", "", 230);
+		
 		$this->RegisterVariableInteger("ErrorStatus", "Error Status", "IPS2AcerP5530.ErrorStatus", 240);
 		
 	}
@@ -454,9 +438,12 @@ class IPS2AcerP5530 extends IPSModule
 
 		If ($Response <> Null) {
 			SetValueInteger($this->GetIDForIdent("LastKeepAlive"), time() );
-
+		
 			If (GetValueBoolean($this->GetIDForIdent("Power")) <> boolval($Data->pwr)) {
 				SetValueBoolean($this->GetIDForIdent("Power"), boolval($Data->pwr));
+				If (boolval($Data->pwr) == true) {
+					$this->SetVariablesEnable(true);
+				}
 			}
 			If (GetValueBoolean($this->GetIDForIdent("Freeze")) <> boolval($Data->frz)) {
 				SetValueBoolean($this->GetIDForIdent("Freeze"), boolval($Data->frz));
@@ -498,8 +485,7 @@ class IPS2AcerP5530 extends IPSModule
 		}
 		else {
 			SetValueBoolean($this->GetIDForIdent("Power"), false);
-
-			// restliche Statusvariablen disablen!
+			$this->SetVariablesEnable(false);
 		}
 	}
 	
@@ -513,6 +499,23 @@ class IPS2AcerP5530 extends IPSModule
 			SetValueString($this->GetIDForIdent("Status"), $Value);
 		}
 	} 
+	
+	private function SetVariablesEnable($Enable)
+	{
+		If ($this->ReadPropertyBoolean("Open") == true) {
+			$this->SendDebug("SetVariablesEnable", "Ausfuehrung", 0);
+			$VariablesArray = array("Hide", "Freeze", "ECO", "Source", "Volume", "Brightness", "Contrast", "VKeystone", "HKeystone", "ColorTemp",
+					       "DisplayMode", "AutoKeystone", "AspectRatio", "DigitalZoom", "Projection", "StartupScreen");
+			foreach ($VariablesArray as $Variables) {
+				If ($Enable == true) {
+					$this->EnableAction($Variables);
+				}
+				else {
+					$this->DisableAction($Variables);
+				}
+			}
+		}
+	}
 	
 	private function ConnectionTest()
 	{
