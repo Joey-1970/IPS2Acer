@@ -118,6 +118,10 @@ class IPS2AcerP5530 extends IPSModule
 		
 		$this->RegisterVariableInteger("StartupScreen", "Startup Screen", "IPS2AcerP5530.StartupScreen", 220);
 		$this->EnableAction("StartupScreen");
+		
+		$this->RegisterVariableInteger("LampHours", "Lamp Hours", "", 230);
+		$this->RegisterVariableInteger("ErrorStatus", "Error Status", "", 240);
+		
 	}
 	
 	public function GetConfigurationForm() { 
@@ -389,27 +393,45 @@ class IPS2AcerP5530 extends IPSModule
 			$User = $this->ReadPropertyString("User");;
 			$Password = $this->ReadPropertyString("Password");
 			$IPAddress = $this->ReadPropertyString("IPAddress");
-			$URL = "http://".$IPAddress."/form/control_cgi";
+			$URL_control = "http://".$IPAddress."/form/control_cgi";
+			$URL_home = "http://".$IPAddress."/form/control_cgi";
 
 			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $URL);
+			curl_setopt($ch, CURLOPT_URL, $URL_control);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_USERPWD, "$User:$Password");
 			curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
 			curl_setopt($ch, CURLOPT_TIMEOUT, 2);
-			$Response = curl_exec($ch);
+			$Response_control = curl_exec($ch);
+			curl_setopt($ch, CURLOPT_URL, $URL_home);
+			$Response_home = curl_exec($ch);
 			curl_close($ch);
 			
-			If ($Response <> Null) {
-				$this->SetVariables($Response);
+			
+			
+			
+			If ($Response_control <> Null) {
+				$this->SetVariables($Response_control);
 			}
 			else {
 				SetValueBoolean($this->GetIDForIdent("Power"), false);
 				
 				// restliche Statusvariablen disablen!
-			}	
-			   // [dyar] => 29
+			}
+			If ($Response_home <> Null) {
+				// Anführungszeichen der Keys ergänzen
+				$Response_home = preg_replace('/("(.*?)"|(\w+))(\s*:\s*)\+?(0+(?=\d))?(".*?"|.)/s', '"$2$3"$4$6', $Response_home);
+				// HTML-Tags entfernen
+				$Response_home = strip_tags($Response_home);
+				$Data = json_decode($Response_home);
+				If (GetValueInteger($this->GetIDForIdent("LampHours")) <> intval($Data->lamphur)) {
+					SetValueInteger($this->GetIDForIdent("LampHours"), intval($Data->lamphur));
+				}
+				If (GetValueInteger($this->GetIDForIdent("ErrorStatus")) <> intval($Data->errorstatus)) {
+					SetValueInteger($this->GetIDForIdent("ErrorStatus"), intval($Data->errorstatus));
+				}
+			}
 		}
 	}
 	
@@ -463,10 +485,6 @@ class IPS2AcerP5530 extends IPSModule
 			If (GetValueBoolean($this->GetIDForIdent("AutoKeystone")) <> boolval($Data->aks)) {
 				SetValueBoolean($this->GetIDForIdent("AutoKeystone"), boolval($Data->aks));
 			}
-			
-			
-			$StatusArray[8] = "Lamp Hours: ";
-			$StatusArray[9] = "Error Status: ";
 			$this->SetStatusData($StatusArray);
 		}
 		else {
