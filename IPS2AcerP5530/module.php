@@ -373,7 +373,6 @@ class IPS2AcerP5530 extends IPSModule
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->SendDebug("GetData", "Ausfuehrung", 0);
 			$this->GetcURLData();
-			// weitere Daten abholen
 		}
 	}
 	
@@ -400,16 +399,14 @@ class IPS2AcerP5530 extends IPSModule
 			$Response_home = curl_exec($ch);
 			curl_close($ch);
 			
-			
-			
-			
 			If ($Response_control <> Null) {
 				$this->SetVariables($Response_control);
 			}
 			else {
-				SetValueBoolean($this->GetIDForIdent("Power"), false);
-				
-				// restliche Statusvariablen disablen!
+				If (GetValueBoolean($this->GetIDForIdent("Power")) <> false) {
+					SetValueBoolean($this->GetIDForIdent("Power"), false);
+					$this->SetVariablesEnable(false);
+				}
 			}
 			
 			If ($Response_home <> Null) {
