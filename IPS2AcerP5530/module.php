@@ -402,7 +402,7 @@ class IPS2AcerP5530 extends IPSModule
 			$Password = $this->ReadPropertyString("Password");
 			$IPAddress = $this->ReadPropertyString("IPAddress");
 			$URL_control = "http://".$IPAddress."/form/control_cgi";
-			$URL_home = "http://".$IPAddress."/form/control_cgi";
+			$URL_home = "http://".$IPAddress."/form/home_cgi";
 
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $URL_control);
@@ -427,12 +427,15 @@ class IPS2AcerP5530 extends IPSModule
 				
 				// restliche Statusvariablen disablen!
 			}
+			
+			_decode($Response_home);
+			
 			If ($Response_home <> Null) {
 				// Anführungszeichen der Keys ergänzen
 				$Response_home = preg_replace('/("(.*?)"|(\w+))(\s*:\s*)\+?(0+(?=\d))?(".*?"|.)/s', '"$2$3"$4$6', $Response_home);
 				// HTML-Tags entfernen
 				$Response_home = strip_tags($Response_home);
-				$Data = json_decode($Response_home);
+				$Data = json
 				If (GetValueInteger($this->GetIDForIdent("LampHours")) <> intval($Data->lamphur)) {
 					SetValueInteger($this->GetIDForIdent("LampHours"), intval($Data->lamphur));
 				}
