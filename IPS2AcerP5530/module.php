@@ -63,6 +63,16 @@ class IPS2AcerP5530 extends IPSModule
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Volume", 0, "%d", "Speaker", 0x00FF00);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Volume", 101, "+", "Speaker", -1);
 		
+		$this->RegisterProfileInteger("IPS2AcerP5530.Brightness", "Intensity", "", "", 0, 1, 0);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Brightness", -1, "-", "Intensity", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Brightness", 0, "%d", "Intensity", 0x00FF00);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Brightness", 101, "+", "Intensity", -1);
+		
+		$this->RegisterProfileInteger("IPS2AcerP5530.Contrast", "Intensity", "", "", 0, 1, 0);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Contrast", -1, "-", "Intensity", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Contrast", 0, "%d", "Intensity", 0x00FF00);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Contrast", 101, "+", "Intensity", -1);
+		
 		$this->RegisterProfileInteger("IPS2AcerP5530.ErrorStatus", "Information", "", "", 0, 6, 0);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.ErrorStatus", 0, "Normal", "Information", 0x00FF00);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.ErrorStatus", 1, "Fan Lock", "Alert", 0xFF0000);
@@ -91,9 +101,9 @@ class IPS2AcerP5530 extends IPSModule
 		
 		$this->RegisterVariableInteger("Volume", "Volume", "IPS2AcerP5530.Volume", 100);
 				
-		$this->RegisterVariableInteger("Brightness", "Brightness", "IPS2AcerP5530.Parameter", 110);
+		$this->RegisterVariableInteger("Brightness", "Brightness", "IPS2AcerP5530.Brightness", 110);
 		
-		$this->RegisterVariableInteger("Contrast", "Contrast", "IPS2AcerP5530.Parameter", 120);
+		$this->RegisterVariableInteger("Contrast", "Contrast", "IPS2AcerP5530.Contrast", 120);
 		
 		$this->RegisterVariableInteger("VKeystone", "V.-Keystone", "IPS2AcerP5530.Parameter", 130);
 		
@@ -201,25 +211,25 @@ class IPS2AcerP5530 extends IPSModule
 						If ($Value == -1) {
 							$this->SetcURLData("vol1=vol1");
 						}
-						elseIf ($Value == 100) {
+						elseIf ($Value == 101) {
 							$this->SetcURLData("vol2=vol2");
 						}
 					break;
 				case "Brightness":
 						SetValueInteger($this->GetIDForIdent($Ident), $Value);
-						If ($Value == 0) {
+						If ($Value == -1) {
 							$this->SetcURLData("bri1=bri1");
 						}
-						else {
+						elseIf ($Value == 101) {
 							$this->SetcURLData("bri2=bri2");
 						}
 					break;
 				case "Contrast":
 						SetValueInteger($this->GetIDForIdent($Ident), $Value);
-						If ($Value == 0) {
+						If ($Value == -1) {
 							$this->SetcURLData("con1=con1");
 						}
-						else {
+						elseIf ($Value == 101) {
 							$this->SetcURLData("con2=con2");
 						}
 					break;
@@ -464,9 +474,13 @@ class IPS2AcerP5530 extends IPSModule
 			If (GetValueInteger($this->GetIDForIdent("Volume")) <> intval($Data->vol)) {
 				SetValueInteger($this->GetIDForIdent("Volume"), intval($Data->vol));
 			}
-			$StatusArray[1] = "Volume: ".intval($Data->vol);
-			$StatusArray[2] = "Brightness: ".intval($Data->bri);
-			$StatusArray[3] = "Contrast: ".intval($Data->con);
+			If (GetValueInteger($this->GetIDForIdent("Brightness")) <> intval($Data->bri)) {
+				SetValueInteger($this->GetIDForIdent("Brightness"), intval($Data->bri));
+			}
+			If (GetValueInteger($this->GetIDForIdent("Contrast")) <> intval($Data->con)) {
+				SetValueInteger($this->GetIDForIdent("Contrast"), intval($Data->con));
+			}
+			
 			$StatusArray[4] = "V.-Keystone: ".intval($Data->vks);
 			$StatusArray[5] = "H.-Keystone: ".intval($Data->hks);
 			$StatusArray[6] = "Gamma: ".floatval($Data->gam);
@@ -500,7 +514,7 @@ class IPS2AcerP5530 extends IPSModule
 	{
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$Value = "";
-			for ($i = 1; $i <= count($StatusArray); $i++) {
+			for ($i = 4; $i <= count($StatusArray); $i++) {
 				$Value = $Value.$StatusArray[$i].chr(13);
 			}
 			SetValueString($this->GetIDForIdent("Status"), $Value);
