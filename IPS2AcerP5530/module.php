@@ -58,6 +58,11 @@ class IPS2AcerP5530 extends IPSModule
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Parameter", 0, "-", "Shutter", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Parameter", 1, "+", "Shutter", -1);
 		
+		$this->RegisterProfileInteger("IPS2AcerP5530.Volume", "Speaker", "", "", 0, 1, 0);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Volume", -1, "-", "Speaker", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Volume", 0, "%d", "Speaker", 0x00FF00);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Volume", 101, "+", "Speaker", -1);
+		
 		$this->RegisterProfileInteger("IPS2AcerP5530.ErrorStatus", "Information", "", "", 0, 6, 0);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.ErrorStatus", 0, "Normal", "Information", 0x00FF00);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.ErrorStatus", 1, "Fan Lock", "Alert", 0xFF0000);
@@ -84,7 +89,7 @@ class IPS2AcerP5530 extends IPSModule
 
 		$this->RegisterVariableString("Status", "Status", "~TextBox", 95);
 		
-		$this->RegisterVariableInteger("Volume", "Volume", "IPS2AcerP5530.Parameter", 100);
+		$this->RegisterVariableInteger("Volume", "Volume", "IPS2AcerP5530.Volume", 100);
 				
 		$this->RegisterVariableInteger("Brightness", "Brightness", "IPS2AcerP5530.Parameter", 110);
 		
@@ -191,10 +196,10 @@ class IPS2AcerP5530 extends IPSModule
 					break;
 				case "Volume":
 						SetValueInteger($this->GetIDForIdent($Ident), $Value);
-						If ($Value == 0) {
+						If ($Value == -1) {
 							$this->SetcURLData("vol1=vol1");
 						}
-						else {
+						elseIf ($Value == 100) {
 							$this->SetcURLData("vol2=vol2");
 						}
 					break;
@@ -453,6 +458,9 @@ class IPS2AcerP5530 extends IPSModule
 			}
 			If (GetValueInteger($this->GetIDForIdent("Source")) <> intval($Data->src)) {
 				SetValueInteger($this->GetIDForIdent("Source"), intval($Data->src));
+			}
+			If (GetValueInteger($this->GetIDForIdent("Volume")) <> intval($Data->vol)) {
+				SetValueInteger($this->GetIDForIdent("Volume"), intval($Data->vol));
 			}
 			$StatusArray[1] = "Volume: ".intval($Data->vol);
 			$StatusArray[2] = "Brightness: ".intval($Data->bri);
