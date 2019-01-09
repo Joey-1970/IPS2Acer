@@ -148,6 +148,8 @@ class IPS2AcerP5530 extends IPSModule
 		//Never delete this line!
 		parent::ApplyChanges();
 		
+		SetValueInteger($this->GetIDForIdent("Source"), 3);
+		
 		If (IPS_GetKernelRunlevel() == 10103) {
 			If ($this->ReadPropertyBoolean("Open") == true) {
 				
