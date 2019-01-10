@@ -563,7 +563,7 @@ class IPS2AcerP5530 extends IPSModule
 		else {
 			IPS_LogMessage("IPS2AcerP5530","IP ".$this->ReadPropertyString("IPAddress")." reagiert nicht!");
 			$this->SendDebug("ConnectionTest", "IP ".$this->ReadPropertyString("IPAddress")." reagiert nicht!", 0);
-			$this->SetStatus(104);
+			//$this->SetStatus(104);
 		}
 	return $result;
 	}
