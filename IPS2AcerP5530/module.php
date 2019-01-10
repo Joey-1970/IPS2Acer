@@ -73,6 +73,16 @@ class IPS2AcerP5530 extends IPSModule
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Contrast", 0, "%d", "Intensity", 0x00FF00);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.Contrast", 101, "+", "Intensity", -1);
 		
+		$this->RegisterProfileInteger("IPS2AcerP5530.VKeystone", "TV", "", "", 0, 1, 0);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.VKeystone", -21, "-", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.VKeystone", -20, "%d", "TV", 0x00FF00);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.VKeystone", 21, "+", "TV", -1);
+		
+		$this->RegisterProfileInteger("IPS2AcerP5530.HKeystone", "TV", "", "", 0, 1, 0);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.HKeystone", -21, "-", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.HKeystone", -20, "%d", "TV", 0x00FF00);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.HKeystone", 21, "+", "TV", -1);
+		
 		$this->RegisterProfileInteger("IPS2AcerP5530.ErrorStatus", "Information", "", "", 0, 6, 0);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.ErrorStatus", 0, "Normal", "Information", 0x00FF00);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.ErrorStatus", 1, "Fan Lock", "Alert", 0xFF0000);
@@ -105,9 +115,9 @@ class IPS2AcerP5530 extends IPSModule
 		
 		$this->RegisterVariableInteger("Contrast", "Contrast", "IPS2AcerP5530.Contrast", 120);
 		
-		$this->RegisterVariableInteger("VKeystone", "V.-Keystone", "IPS2AcerP5530.Parameter", 130);
+		$this->RegisterVariableInteger("VKeystone", "V.-Keystone", "IPS2AcerP5530.VKeystone", 130);
 		
-		$this->RegisterVariableInteger("HKeystone", "H.-Keystone", "IPS2AcerP5530.Parameter", 140);
+		$this->RegisterVariableInteger("HKeystone", "H.-Keystone", "IPS2AcerP5530.HKeystone", 140);
 		
 		$this->RegisterVariableInteger("Gamma", "Gamma", "IPS2AcerP5530.Parameter", 150);
 		
@@ -235,19 +245,19 @@ class IPS2AcerP5530 extends IPSModule
 					break;
 				case "VKeystone":
 						SetValueInteger($this->GetIDForIdent($Ident), $Value);
-						If ($Value == 0) {
+						If ($Value == -21) {
 							$this->SetcURLData("vks1=vks1");
 						}
-						else {
+						elseIf ($Value == 21) {
 							$this->SetcURLData("vks2=vks2");
 						}
 					break;
 				case "HKeystone":
 						SetValueInteger($this->GetIDForIdent($Ident), $Value);
-						If ($Value == 0) {
+						If ($Value == -21) {
 							$this->SetcURLData("hks1=hks1");
 						}
-						else {
+						elseIf ($Value == 21) {
 							$this->SetcURLData("hks2=hks2");
 						}
 					break;
@@ -480,9 +490,13 @@ class IPS2AcerP5530 extends IPSModule
 			If (GetValueInteger($this->GetIDForIdent("Contrast")) <> intval($Data->con)) {
 				SetValueInteger($this->GetIDForIdent("Contrast"), intval($Data->con));
 			}
+			If (GetValueInteger($this->GetIDForIdent("VKeystone")) <> intval($Data->vks)) {
+				SetValueInteger($this->GetIDForIdent("VKeystone"), intval($Data->vks));
+			}
+			If (GetValueInteger($this->GetIDForIdent("HKeystone")) <> intval($Data->hks)) {
+				SetValueInteger($this->GetIDForIdent("HKeystone"), intval($Data->hks));
+			}
 			
-			$StatusArray[4] = "V.-Keystone: ".intval($Data->vks);
-			$StatusArray[5] = "H.-Keystone: ".intval($Data->hks);
 			$StatusArray[6] = "Gamma: ".floatval($Data->gam);
 			$StatusArray[7] = "Color Temp: ".$Data->ctp;
 			$StatusArray[7] = "Digital Zoom: ".floatval($Data->zom);
@@ -514,7 +528,7 @@ class IPS2AcerP5530 extends IPSModule
 	{
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$Value = "";
-			for ($i = 4; $i <= count($StatusArray); $i++) {
+			for ($i = 6; $i <= count($StatusArray); $i++) {
 				$Value = $Value.$StatusArray[$i].chr(13);
 			}
 			SetValueString($this->GetIDForIdent("Status"), $Value);
