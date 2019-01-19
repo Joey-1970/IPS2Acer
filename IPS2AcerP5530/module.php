@@ -83,7 +83,7 @@ class IPS2AcerP5530 extends IPSModule
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.HKeystone", -20, "%d", "TV", 0x00FF00);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.HKeystone", 21, "+", "TV", -1);
 		
-		$this->RegisterProfileFloat("IPS2AcerP5530.DigitalZoom", "TV", "", "", -0.1, 2.1, 0.1, 1);
+		$this->RegisterProfileFloat("IPS2AcerP5530.DigitalZoom", "TV", "", "", -0.1, 2.1, 0, 1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.DigitalZoom", -0.1, "-", "TV", -1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.DigitalZoom", 0, "%d", "TV", 0x00FF00);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.DigitalZoom", 2.1, "+", "TV", -1);
@@ -285,7 +285,7 @@ class IPS2AcerP5530 extends IPSModule
 						}
 					break;
 				case "DigitalZoom":
-						SetValueFloatr($this->GetIDForIdent($Ident), $Value);
+						SetValueFloat($this->GetIDForIdent($Ident), $Value);
 						If ($Value == -0.1) {
 							$this->SetcURLData("zom1=zom1");
 						}
