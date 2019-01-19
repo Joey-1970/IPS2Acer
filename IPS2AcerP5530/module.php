@@ -502,9 +502,8 @@ class IPS2AcerP5530 extends IPSModule
 				SetValueInteger($this->GetIDForIdent("HKeystone"), intval($Data->hks));
 			}
 			
-			$StatusArray[6] = "Gamma: ".floatval($Data->gam);
-			$StatusArray[7] = "Color Temp: ".$Data->ctp;
-			$this->SetStatusData($StatusArray);
+			$StatusText = "Gamma: ".floatval($Data->gam).chr(13)."Color Temp: ".$Data->ctp;
+			SetValueString($this->GetIDForIdent("Status"), $StatusText);
 			
 			If (GetValueFloat($this->GetIDForIdent("DigitalZoom")) <> floatval($Data->zom)) {
 				SetValueFloat($this->GetIDForIdent("DigitalZoom"), floatval($Data->zom));
@@ -524,24 +523,12 @@ class IPS2AcerP5530 extends IPSModule
 			If (GetValueBoolean($this->GetIDForIdent("AutoKeystone")) <> boolval($Data->aks)) {
 				SetValueBoolean($this->GetIDForIdent("AutoKeystone"), boolval($Data->aks));
 			}
-			$this->SetStatusData($StatusArray);
 		}
 		else {
 			SetValueBoolean($this->GetIDForIdent("Power"), false);
 			$this->SetVariablesEnable(false);
 		}
 	}
-	
-	private function SetStatusData($StatusArray)
-	{
-		If ($this->ReadPropertyBoolean("Open") == true) {
-			$Value = "";
-			for ($i = 6; $i <= count($StatusArray); $i++) {
-				$Value = $Value.$StatusArray[$i].chr(13);
-			}
-			SetValueString($this->GetIDForIdent("Status"), $Value);
-		}
-	} 
 	
 	private function SetVariablesEnable($Enable)
 	{
