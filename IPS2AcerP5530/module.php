@@ -85,7 +85,7 @@ class IPS2AcerP5530 extends IPSModule
 		
 		$this->RegisterProfileFloat("IPS2AcerP5530.DigitalZoom", "TV", "", "", -0.1, 2.1, 0, 1);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.DigitalZoom", -0.1, "-", "TV", -1);
-		IPS_SetVariableProfileAssociation("IPS2AcerP5530.DigitalZoom", 0, "%d", "TV", 0x00FF00);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.DigitalZoom", 0, "%1f", "TV", 0x00FF00);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.DigitalZoom", 2.1, "+", "TV", -1);
 		
 		$this->RegisterProfileInteger("IPS2AcerP5530.ErrorStatus", "Information", "", "", 0, 6, 0);
