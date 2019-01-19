@@ -83,6 +83,11 @@ class IPS2AcerP5530 extends IPSModule
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.HKeystone", -20, "%d", "TV", 0x00FF00);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.HKeystone", 21, "+", "TV", -1);
 		
+		$this->RegisterProfileFloat("IPS2AcerP5530.DigitalZoom", "TV", "", "", -0.1, 2.1, 0.1, 1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.DigitalZoom", -0.1, "-", "TV", -1);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.DigitalZoom", 0, "%d", "TV", 0x00FF00);
+		IPS_SetVariableProfileAssociation("IPS2AcerP5530.DigitalZoom", 2.1, "+", "TV", -1);
+		
 		$this->RegisterProfileInteger("IPS2AcerP5530.ErrorStatus", "Information", "", "", 0, 6, 0);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.ErrorStatus", 0, "Normal", "Information", 0x00FF00);
 		IPS_SetVariableProfileAssociation("IPS2AcerP5530.ErrorStatus", 1, "Fan Lock", "Alert", 0xFF0000);
@@ -129,7 +134,7 @@ class IPS2AcerP5530 extends IPSModule
 		
 		$this->RegisterVariableInteger("AspectRatio", "Aspect Ratio", "IPS2AcerP5530.AspectRatio", 190);
 		
-		$this->RegisterVariableInteger("DigitalZoom", "Digital Zoom", "IPS2AcerP5530.Parameter", 200);
+		$this->RegisterVariableFloat("DigitalZoom", "Digital Zoom", "IPS2AcerP5530.DigitalZoom", 200);
 		
 		$this->RegisterVariableInteger("Projection", "Projection", "IPS2AcerP5530.Projection", 210);
 		
@@ -280,11 +285,11 @@ class IPS2AcerP5530 extends IPSModule
 						}
 					break;
 				case "DigitalZoom":
-						SetValueInteger($this->GetIDForIdent($Ident), $Value);
-						If ($Value == 0) {
+						SetValueFloatr($this->GetIDForIdent($Ident), $Value);
+						If ($Value == -0.1) {
 							$this->SetcURLData("zom1=zom1");
 						}
-						else {
+						elseIf ($Value == 2.1) {
 							$this->SetcURLData("zom2=zom2");
 						}
 					break;
@@ -499,8 +504,11 @@ class IPS2AcerP5530 extends IPSModule
 			
 			$StatusArray[6] = "Gamma: ".floatval($Data->gam);
 			$StatusArray[7] = "Color Temp: ".$Data->ctp;
-			$StatusArray[7] = "Digital Zoom: ".floatval($Data->zom);
 			$this->SetStatusData($StatusArray);
+			
+			If (GetValueFloat($this->GetIDForIdent("DigitalZoom")) <> floatval($Data->zom)) {
+				SetValueFloat($this->GetIDForIdent("DigitalZoom"), floatval($Data->zom));
+			}
 			If (GetValueInteger($this->GetIDForIdent("DisplayMode")) <> intval($Data->mod)) {
 				SetValueInteger($this->GetIDForIdent("DisplayMode"), intval($Data->mod));
 			}
