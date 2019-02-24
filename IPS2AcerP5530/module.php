@@ -175,22 +175,20 @@ class IPS2AcerP5530 extends IPSModule
 		
 		SetValueInteger($this->GetIDForIdent("Source"), 3);
 		
-		If (IPS_GetKernelRunlevel() == 10103) {
-			If ($this->ReadPropertyBoolean("Open") == true) {
-				
-				$this->SetStatus(102);
-				If ($this->ConnectionTest() == true) {
-					// Erste Abfrage der Daten
-					$this->GetData();
-				}
-				$this->SetTimerInterval("State", 5 * 1000);
-				
+		If ($this->ReadPropertyBoolean("Open") == true) {
+
+			$this->SetStatus(102);
+			If ($this->ConnectionTest() == true) {
+				// Erste Abfrage der Daten
+				$this->GetcURLData();
 			}
-			else {
-				$this->SetStatus(104);
-				$this->SetTimerInterval("State", 0);
-			}	   
+			$this->SetTimerInterval("State", 5 * 1000);
+
 		}
+		else {
+			$this->SetStatus(104);
+			$this->SetTimerInterval("State", 0);
+		}	   
 	}
 
 	
