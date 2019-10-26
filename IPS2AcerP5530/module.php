@@ -162,7 +162,8 @@ class IPS2AcerP5530 extends IPSModule
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "User", "caption" => "User");
 		$arrayElements[] = array("type" => "PasswordTextBox", "name" => "Password", "caption" => "Password");
  		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
-		
+		$arrayElements[] = array("type" => "Label", "label" => "Test Center"); 
+		$arrayElements[] = array("type" => "TestCenter", "name" => "TestCenter");
 		
 		
 		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
