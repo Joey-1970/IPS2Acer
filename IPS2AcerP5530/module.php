@@ -425,35 +425,43 @@ class IPS2AcerP5530 extends IPSModule
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
 			curl_setopt($ch, CURLOPT_TIMEOUT, 2);
 			
-			$tries = 5;
+			If (GetValueBoolean($this->GetIDForIdent("Power")) == true) {
+				$tries = 5;
+			}
+			else {
+				$tries = 1;
+			}
+			
 			do {
 				curl_setopt($ch, CURLOPT_URL, $URL_control);
 				$Response_control = curl_exec($ch);
 				
 				If ($Response_control <> Null) {
 					$this->SetVariables($Response_control);
+					// Weitere Daten einlesen
+					curl_setopt($ch, CURLOPT_URL, $URL_home);
+					$Response_home = curl_exec($ch);
+
+					If ($Response_home <> Null) {
+						// Anführungszeichen der Keys ergänzen
+						$Response_home = preg_replace('/("(.*?)"|(\w+))(\s*:\s*)\+?(0+(?=\d))?(".*?"|.)/s', '"$2$3"$4$6', $Response_home);
+						// HTML-Tags entfernen
+						$Response_home = strip_tags($Response_home);
+						$Data = json_decode($Response_home);
+						If (GetValueInteger($this->GetIDForIdent("LampHours")) <> intval($Data->lamphur)) {
+							SetValueInteger($this->GetIDForIdent("LampHours"), intval($Data->lamphur));
+						}
+						If (GetValueInteger($this->GetIDForIdent("ErrorStatus")) <> intval($Data->errorstatus)) {
+							SetValueInteger($this->GetIDForIdent("ErrorStatus"), intval($Data->errorstatus));
+						}
+					}
 					break;
 				}
 				else {
 					$this->SendDebug("GetcURLData", "Fehler bei der Datenermittung!", 0);
+					IPS_Sleep(250);
 				}
 
-				curl_setopt($ch, CURLOPT_URL, $URL_home);
-				$Response_home = curl_exec($ch);
-
-				If ($Response_home <> Null) {
-					// Anführungszeichen der Keys ergänzen
-					$Response_home = preg_replace('/("(.*?)"|(\w+))(\s*:\s*)\+?(0+(?=\d))?(".*?"|.)/s', '"$2$3"$4$6', $Response_home);
-					// HTML-Tags entfernen
-					$Response_home = strip_tags($Response_home);
-					$Data = json_decode($Response_home);
-					If (GetValueInteger($this->GetIDForIdent("LampHours")) <> intval($Data->lamphur)) {
-						SetValueInteger($this->GetIDForIdent("LampHours"), intval($Data->lamphur));
-					}
-					If (GetValueInteger($this->GetIDForIdent("ErrorStatus")) <> intval($Data->errorstatus)) {
-						SetValueInteger($this->GetIDForIdent("ErrorStatus"), intval($Data->errorstatus));
-					}
-				}
 				$tries--;
 			} while ($tries); 
 			
