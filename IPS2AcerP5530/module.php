@@ -526,8 +526,8 @@ class IPS2AcerP5530 extends IPSModule
 		}
 		else {
 			$this->SendDebug("SetVariables", "Power false", 0);
-			SetValueBoolean($this->GetIDForIdent("Power"), false);
-			$this->SetVariablesEnable(false);
+			//SetValueBoolean($this->GetIDForIdent("Power"), false);
+			//$this->SetVariablesEnable(false);
 		}
 	}
 	
