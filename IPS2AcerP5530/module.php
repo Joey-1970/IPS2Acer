@@ -417,41 +417,52 @@ class IPS2AcerP5530 extends IPSModule
 			$IPAddress = $this->ReadPropertyString("IPAddress");
 			$URL_control = "http://".$IPAddress."/form/control_cgi";
 			$URL_home = "http://".$IPAddress."/form/home_cgi";
-
+			
 			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $URL_control);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_USERPWD, "$User:$Password");
 			curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
 			curl_setopt($ch, CURLOPT_TIMEOUT, 2);
-			$Response_control = curl_exec($ch);
-			curl_setopt($ch, CURLOPT_URL, $URL_home);
-			$Response_home = curl_exec($ch);
-			curl_close($ch);
 			
-			If ($Response_control <> Null) {
-				$this->SetVariables($Response_control);
-			}
-			else {
+			$tries = 5;
+			do {
+				curl_setopt($ch, CURLOPT_URL, $URL_control);
+				$Response_control = curl_exec($ch);
+				
+				If ($Response_control <> Null) {
+					$this->SetVariables($Response_control);
+					break;
+				}
+				else {
+					$this->SendDebug("GetcURLData", "Fehler bei der Datenermittung!", 0);
+				}
+
+				curl_setopt($ch, CURLOPT_URL, $URL_home);
+				$Response_home = curl_exec($ch);
+
+				If ($Response_home <> Null) {
+					// Anführungszeichen der Keys ergänzen
+					$Response_home = preg_replace('/("(.*?)"|(\w+))(\s*:\s*)\+?(0+(?=\d))?(".*?"|.)/s', '"$2$3"$4$6', $Response_home);
+					// HTML-Tags entfernen
+					$Response_home = strip_tags($Response_home);
+					$Data = json_decode($Response_home);
+					If (GetValueInteger($this->GetIDForIdent("LampHours")) <> intval($Data->lamphur)) {
+						SetValueInteger($this->GetIDForIdent("LampHours"), intval($Data->lamphur));
+					}
+					If (GetValueInteger($this->GetIDForIdent("ErrorStatus")) <> intval($Data->errorstatus)) {
+						SetValueInteger($this->GetIDForIdent("ErrorStatus"), intval($Data->errorstatus));
+					}
+				}
+				$tries--;
+			} while ($tries); 
+			
+			curl_close($ch);
+			If (!$tries) {
 				If (GetValueBoolean($this->GetIDForIdent("Power")) <> false) {
 					$this->SendDebug("GetcURLData", "Power false", 0);
 					SetValueBoolean($this->GetIDForIdent("Power"), false);
 					$this->SetVariablesEnable(false);
-				}
-			}
-			
-			If ($Response_home <> Null) {
-				// Anführungszeichen der Keys ergänzen
-				$Response_home = preg_replace('/("(.*?)"|(\w+))(\s*:\s*)\+?(0+(?=\d))?(".*?"|.)/s', '"$2$3"$4$6', $Response_home);
-				// HTML-Tags entfernen
-				$Response_home = strip_tags($Response_home);
-				$Data = json_decode($Response_home);
-				If (GetValueInteger($this->GetIDForIdent("LampHours")) <> intval($Data->lamphur)) {
-					SetValueInteger($this->GetIDForIdent("LampHours"), intval($Data->lamphur));
-				}
-				If (GetValueInteger($this->GetIDForIdent("ErrorStatus")) <> intval($Data->errorstatus)) {
-					SetValueInteger($this->GetIDForIdent("ErrorStatus"), intval($Data->errorstatus));
 				}
 			}
 		}
