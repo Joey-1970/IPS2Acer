@@ -458,7 +458,7 @@ class IPS2AcerP5530 extends IPSModule
 					break;
 				}
 				else {
-					$this->SendDebug("GetcURLData", "Fehler bei der Datenermittung!", 0);
+					$this->SendDebug("GetcURLData", "Keine Daten erhalten! (Geraet ausgeschaltet?)", 0);
 					IPS_Sleep(250);
 				}
 
