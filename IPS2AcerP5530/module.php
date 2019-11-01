@@ -204,6 +204,7 @@ class IPS2AcerP5530 extends IPSModule
 					If ($Value == true) {
 						$this->WakeOnLAN();
 						$this->GetcURLData();
+						$this->SetTimerInterval("State", 1 * 1000);
 					}
 					else {
 						$this->SetcURLData("pwr=pwr");
@@ -478,6 +479,7 @@ class IPS2AcerP5530 extends IPSModule
 		
 			If (GetValueBoolean($this->GetIDForIdent("Power")) <> boolval($Data->pwr)) {
 				SetValueBoolean($this->GetIDForIdent("Power"), boolval($Data->pwr));
+				$this->SetTimerInterval("State", 5 * 1000);
 				If (boolval($Data->pwr) == true) {
 					$this->SetVariablesEnable(true);
 				}
