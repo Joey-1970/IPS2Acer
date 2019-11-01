@@ -382,11 +382,7 @@ class IPS2AcerP5530 extends IPSModule
 			curl_setopt($ch, CURLOPT_POST, true);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $Message);
 			$Response = curl_exec($ch);
-			/*
-			if(!curl_exec($ch)){
-			    die('Error: "' . curl_error($ch) . '" - Code: ' . curl_errno($ch));
-			}
-			*/
+
 			curl_close($ch);
 			If ($Response <> Null) {
 				$this->SetVariables($Response);
@@ -397,14 +393,6 @@ class IPS2AcerP5530 extends IPSModule
 				// restliche Statusvariablen disablen!
 			}
 			
-		}
-	}
-	
-	private function GetData()
-	{
-		If ($this->ReadPropertyBoolean("Open") == true) {
-			$this->SendDebug("GetData", "Ausfuehrung", 0);
-			$this->GetcURLData();
 		}
 	}
 	
