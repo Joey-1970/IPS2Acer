@@ -203,6 +203,7 @@ class IPS2AcerP5530 extends IPSModule
 				case "Power":
 					If ($Value == true) {
 						$this->WakeOnLAN();
+						$this->GetcURLData();
 					}
 					else {
 						$this->SetcURLData("pwr=pwr");
