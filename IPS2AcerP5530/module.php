@@ -179,6 +179,8 @@ class IPS2AcerP5530 extends IPSModule
 		//Never delete this line!
 		parent::ApplyChanges();
 		
+		$this->SetTimerInterval("OSD", 0);
+		
 		SetValueInteger($this->GetIDForIdent("Source"), 3);
 		
 		If ($this->ReadPropertyBoolean("Open") == true) {
@@ -211,7 +213,7 @@ class IPS2AcerP5530 extends IPSModule
 					If ($Value == true) {
 						$this->WakeOnLAN();
 						$this->GetcURLData();
-						$this->SetTimerInterval("State", 1 * 1000);
+						$this->SetTimerInterval("State", 1 * 500);
 					}
 					else {
 						$this->SetcURLData("pwr=pwr");
