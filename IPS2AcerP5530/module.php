@@ -6,6 +6,7 @@ class IPS2AcerP5530 extends IPSModule
 		//Never delete this line!
 		parent::Destroy();
 		$this->SetTimerInterval("State", 0);
+		$this->SetTimerInterval("OSD", 0);
 	}
 	
 	// Überschreibt die interne IPS_Create($id) Funktion
@@ -18,7 +19,9 @@ class IPS2AcerP5530 extends IPSModule
 		$this->RegisterPropertyString("MAC", "00:00:00:00:00:00");
 		$this->RegisterPropertyString("User", "User");
 	    	$this->RegisterPropertyString("Password", "Passwort");
+		$this->RegisterPropertyInteger("OSD", 15);
 		$this->RegisterTimer("State", 0, 'IPS2AcerP5530_GetcURLData($_IPS["TARGET"]);');
+		$this->RegisterTimer("OSD", 0, 'IPS2AcerP5530_ResetOSD($_IPS["TARGET"]);');
 		
 		// Profile anlegen
 		$this->RegisterProfileInteger("IPS2AcerP5530.Source", "TV", "", "", 0, 1, 0);
@@ -161,6 +164,8 @@ class IPS2AcerP5530 extends IPSModule
 		$arrayElements[] = array("type" => "Label", "label" => "Zugriffsdaten der Projektor-Website");
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "User", "caption" => "User");
 		$arrayElements[] = array("type" => "PasswordTextBox", "name" => "Password", "caption" => "Password");
+		$arrayElements[] = array("type" => "Label", "label" => "OSD-Timeout (aus den Projektor-Einstellungen)");
+		$arrayElements[] = array("type" => "IntervalBox", "name" => "OSD", "caption" => "Sekunden");
  		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Test Center"); 
 		$arrayElements[] = array("type" => "TestCenter", "name" => "TestCenter");
@@ -195,7 +200,9 @@ class IPS2AcerP5530 extends IPSModule
 	
 	public function RequestAction($Ident, $Value) 
 	{
-  		If (($Ident == "Power") AND ($Value == true)) {
+  		$this->SendDebug("RequestAction", "Ident: ".$Ident." Wert: ".$Value, 0);
+						
+		If (($Ident == "Power") AND ($Value == true)) {
 			$this->WakeOnLAN();
 		}
 		elseIf (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
@@ -572,6 +579,11 @@ class IPS2AcerP5530 extends IPSModule
 			//$this->SetStatus(104);
 		}
 	return $result;
+	}
+	
+	public function ResetOSD()
+	{
+		$this->SetTimerInterval("OSD", 0);
 	}
 	
 	private function RegisterProfileInteger($Name, $Icon, $Prefix, $Suffix, $MinValue, $MaxValue, $StepSize)
