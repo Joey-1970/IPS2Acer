@@ -296,10 +296,10 @@ class IPS2AcerP5530 extends IPSModule
 					break;
 				case "DigitalZoom":
 						SetValueFloat($this->GetIDForIdent($Ident), $Value);
-						If ($Value == -0.1) {
+						If (round($Value, 1) == -0.1) {
 							$this->SetcURLData("zom1=zom1");
 						}
-						elseIf ($Value == 2.1) {
+						elseIf (round($Value, 1) == 2.1) {
 							$this->SetcURLData("zom2=zom2");
 						}
 					break;
