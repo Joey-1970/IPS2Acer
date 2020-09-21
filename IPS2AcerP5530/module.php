@@ -1,14 +1,6 @@
 <?
 class IPS2AcerP5530 extends IPSModule
 {
-	public function Destroy() 
-	{
-		//Never delete this line!
-		parent::Destroy();
-		$this->SetTimerInterval("State", 0);
-		$this->SetTimerInterval("OSD", 0);
-	}
-	
 	// Überschreibt die interne IPS_Create($id) Funktion
         public function Create() 
         {
