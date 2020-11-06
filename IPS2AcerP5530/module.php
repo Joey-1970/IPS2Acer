@@ -12,6 +12,7 @@ class IPS2AcerP5530 extends IPSModule
 		$this->RegisterPropertyString("User", "User");
 	    	$this->RegisterPropertyString("Password", "Passwort");
 		$this->RegisterPropertyInteger("OSD", 15);
+		$this->RegisterPropertyFloat("Zoom", 1.0);
 		$this->RegisterTimer("State", 0, 'IPS2AcerP5530_GetcURLData($_IPS["TARGET"]);');
 		$this->RegisterTimer("OSD", 0, 'IPS2AcerP5530_ResetOSD($_IPS["TARGET"]);');
 		
@@ -157,7 +158,8 @@ class IPS2AcerP5530 extends IPSModule
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "User", "caption" => "User");
 		$arrayElements[] = array("type" => "PasswordTextBox", "name" => "Password", "caption" => "Password");
 		$arrayElements[] = array("type" => "Label", "label" => "OSD-Timeout (aus den Projektor-Einstellungen)");
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "OSD", "caption" => "Sekunden");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "OSD", "caption" => "Sekunden");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Zoom", "caption" => "Faktor", "digits" => 1, "minimum" => 0.0, "maximum" => 2.0);
  		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Test Center"); 
 		$arrayElements[] = array("type" => "TestCenter", "name" => "TestCenter");
