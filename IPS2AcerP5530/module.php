@@ -521,7 +521,7 @@ class IPS2AcerP5530 extends IPSModule
 			If (GetValueFloat($this->GetIDForIdent("DigitalZoom")) <> floatval($Data->zom)) {
 				SetValueFloat($this->GetIDForIdent("DigitalZoom"), floatval($Data->zom));
 			}
-			//$this->AutoZoom();
+			$this->AutoZoom();
 			
 			If (GetValueInteger($this->GetIDForIdent("DisplayMode")) <> intval($Data->mod)) {
 				SetValueInteger($this->GetIDForIdent("DisplayMode"), intval($Data->mod));
@@ -593,18 +593,18 @@ class IPS2AcerP5530 extends IPSModule
 		// Hilfskonstruktion für das Einschalten des OSD
 		$Steps = $Steps + 1;
 		If ($Zoom > $TargetZoom) {
-			$this->SendDebug("AutoZoom", "Bild reduzieren", 0);
+			$this->SendDebug("AutoZoom", "Bild reduzieren: ".$Zoom." ".$TargetZoom." ".$Steps, 0);
 			// Bild reduzieren
-			for($i=0; $i < $Steps; $i++) {
-				$this->SetcURLData("zom1=zom1");
+			for($i = 0; $i < $Steps; $i++) {
+				//$this->SetcURLData("zom1=zom1");
 				$this->SetTimerInterval("OSD", $OSD * 1000);
 			}
 		}
 		elseif ($Zoom < $TargetZoom) {
-			$this->SendDebug("AutoZoom", "Bild vergrößern", 0);
+			$this->SendDebug("AutoZoom", "Bild vergrößern: ".$Zoom." ".$TargetZoom." ".$Steps, 0);
 			// Bild vergrößern
-			for($i=0; $i < $Steps; $i++) {
-				$this->SetcURLData("zom2=zom2");
+			for($i = 0; $i < $Steps; $i++) {
+				//$this->SetcURLData("zom2=zom2");
 				$this->SetTimerInterval("OSD", $OSD * 1000);
 			}
 			
