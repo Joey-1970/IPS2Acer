@@ -582,6 +582,22 @@ class IPS2AcerP5530 extends IPSModule
 		$this->SetTimerInterval("OSD", 0);
 	}
 	
+	public function AutoZoom()
+	{
+		$Zoom = $this->GetValue("DigitalZoom");
+		$TargetZoom = $this->ReadPropertyFloat("Zoom");
+		$Steps = abs(($Zoom - $TargetZoom) / 0.1);
+		If ($Zoom > $TargetZoom) {
+			// Bild reduzieren
+			
+			$this->SetcURLData("zom1=zom1");
+		}
+		elseif ($Zoom < $TargetZoom) {
+			// Bild vergrößern
+			$this->SetcURLData("zom2=zom2");
+		}
+	}
+	
 	private function RegisterProfileInteger($Name, $Icon, $Prefix, $Suffix, $MinValue, $MaxValue, $StepSize)
 	{
 	        if (!IPS_VariableProfileExists($Name))
