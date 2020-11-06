@@ -521,6 +521,8 @@ class IPS2AcerP5530 extends IPSModule
 			If (GetValueFloat($this->GetIDForIdent("DigitalZoom")) <> floatval($Data->zom)) {
 				SetValueFloat($this->GetIDForIdent("DigitalZoom"), floatval($Data->zom));
 			}
+			$this->AutoZoom();
+			
 			If (GetValueInteger($this->GetIDForIdent("DisplayMode")) <> intval($Data->mod)) {
 				SetValueInteger($this->GetIDForIdent("DisplayMode"), intval($Data->mod));
 			}
