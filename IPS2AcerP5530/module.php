@@ -587,14 +587,19 @@ class IPS2AcerP5530 extends IPSModule
 		$Zoom = $this->GetValue("DigitalZoom");
 		$TargetZoom = $this->ReadPropertyFloat("Zoom");
 		$Steps = abs(($Zoom - $TargetZoom) / 0.1);
+		// Hilfskonstruktion für das Einschalten des OSD
+		$Steps = $Steps + 1;
 		If ($Zoom > $TargetZoom) {
 			// Bild reduzieren
-			
-			$this->SetcURLData("zom1=zom1");
+			for($i=0; $i < $Steps; $i++) {
+				$this->SetcURLData("zom1=zom1");
+			}
 		}
 		elseif ($Zoom < $TargetZoom) {
 			// Bild vergrößern
-			$this->SetcURLData("zom2=zom2");
+			for($i=0; $i < $Steps; $i++) {
+				$this->SetcURLData("zom2=zom2");
+			}
 		}
 	}
 	
