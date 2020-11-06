@@ -178,7 +178,7 @@ class IPS2AcerP5530 extends IPSModule
 		SetValueInteger($this->GetIDForIdent("Source"), 3);
 		
 		If ($this->ReadPropertyBoolean("Open") == true) {
-			$this->SendDebug("ApplyChanges", $this->ReadPropertyBooleanString("Password"), 0);
+			$this->SendDebug("ApplyChanges", $this->ReadPropertyString("Password"), 0);
 			$this->SetStatus(102);
 			If ($this->ConnectionTest() == true) {
 				// Erste Abfrage der Daten
