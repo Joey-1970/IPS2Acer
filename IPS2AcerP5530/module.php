@@ -12,6 +12,7 @@ class IPS2AcerP5530 extends IPSModule
 		$this->RegisterPropertyString("User", "User");
 	    	$this->RegisterPropertyString("Password", "Passwort");
 		$this->RegisterPropertyInteger("OSD", 15);
+		$this->RegisterPropertyBoolean("AutoZoom", false);
 		$this->RegisterPropertyFloat("Zoom", 1.0);
 		$this->RegisterTimer("State", 0, 'IPS2AcerP5530_GetcURLData($_IPS["TARGET"]);');
 		$this->RegisterTimer("OSD", 0, 'IPS2AcerP5530_ResetOSD($_IPS["TARGET"]);');
@@ -151,7 +152,7 @@ class IPS2AcerP5530 extends IPSModule
 		$arrayStatus[] = array("code" => 202, "icon" => "error", "caption" => "Kommunikationfehler!");
 		
 		$arrayElements = array(); 
-		$arrayElements[] = array("name" => "Open", "type" => "CheckBox",  "caption" => "Aktiv"); 
+		$arrayElements[] = array("type" => "CheckBox", "name" => "Open", "caption" => "Aktiv"); 
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "IPAddress", "caption" => "IP");
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "MAC", "caption" => "MAC");
 		$arrayElements[] = array("type" => "Label", "label" => "Zugriffsdaten der Projektor-Website");
@@ -159,6 +160,8 @@ class IPS2AcerP5530 extends IPSModule
 		$arrayElements[] = array("type" => "PasswordTextBox", "name" => "Password", "caption" => "Password");
 		$arrayElements[] = array("type" => "Label", "label" => "OSD-Timeout (aus den Projektor-Einstellungen)");
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "OSD", "caption" => "Sekunden");
+		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "CheckBox", "name" => "AutoZoom", "caption" => "Auto Zoom"); 
 		$arrayElements[] = array("type" => "NumberSpinner", "name" => "Zoom", "caption" => "Faktor", "digits" => 1, "minimum" => 0.0, "maximum" => 2.0);
  		$arrayElements[] = array("type" => "Label", "label" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "label" => "Test Center"); 
@@ -521,7 +524,9 @@ class IPS2AcerP5530 extends IPSModule
 			If (GetValueFloat($this->GetIDForIdent("DigitalZoom")) <> floatval($Data->zom)) {
 				SetValueFloat($this->GetIDForIdent("DigitalZoom"), floatval($Data->zom));
 			}
-			$this->AutoZoom();
+			If ($this->ReadPropertyBoolean("AutoZoom") == true) {
+				$this->AutoZoom();
+			}
 			
 			If (GetValueInteger($this->GetIDForIdent("DisplayMode")) <> intval($Data->mod)) {
 				SetValueInteger($this->GetIDForIdent("DisplayMode"), intval($Data->mod));
@@ -591,7 +596,7 @@ class IPS2AcerP5530 extends IPSModule
 		$TargetZoom = $this->ReadPropertyFloat("Zoom");
 		$Steps = abs(($Zoom - $TargetZoom) / 0.1);
 		// Hilfskonstruktion für das Einschalten des OSD
-		$Steps = $Steps + 1;
+		//$Steps = $Steps + 1;
 		If ($Zoom > $TargetZoom) {
 			$this->SendDebug("AutoZoom", "Bild reduzieren: ".$Zoom." ".$TargetZoom." ".$Steps, 0);
 			// Bild reduzieren
