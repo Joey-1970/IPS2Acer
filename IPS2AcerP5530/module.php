@@ -601,7 +601,7 @@ class IPS2AcerP5530 extends IPSModule
 			$this->SendDebug("AutoZoom", "Bild reduzieren: ".$Zoom." ".$TargetZoom." ".$Steps, 0);
 			// Bild reduzieren
 			for($i = 0; $i < $Steps; $i++) {
-				//$this->SetcURLData("zom1=zom1");
+				$this->SetcURLData("zom1=zom1");
 				$this->SetTimerInterval("OSD", $OSD * 1000);
 			}
 		}
@@ -609,7 +609,7 @@ class IPS2AcerP5530 extends IPSModule
 			$this->SendDebug("AutoZoom", "Bild vergrößern: ".$Zoom." ".$TargetZoom." ".$Steps, 0);
 			// Bild vergrößern
 			for($i = 0; $i < $Steps; $i++) {
-				//$this->SetcURLData("zom2=zom2");
+				$this->SetcURLData("zom2=zom2");
 				$this->SetTimerInterval("OSD", $OSD * 1000);
 			}
 			
