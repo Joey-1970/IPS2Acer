@@ -182,7 +182,9 @@ class IPS2AcerP5530 extends IPSModule
 		
 		If ($this->ReadPropertyBoolean("Open") == true) {
 			$this->SendDebug("ApplyChanges", $this->ReadPropertyString("Password"), 0);
-			$this->SetStatus(102);
+			If ($this->GetStatus() <> 102) {
+				$this->SetStatus(102);
+			}
 			If ($this->ConnectionTest() == true) {
 				// Erste Abfrage der Daten
 				$this->GetcURLData();
@@ -191,7 +193,9 @@ class IPS2AcerP5530 extends IPSModule
 
 		}
 		else {
-			$this->SetStatus(104);
+			If ($this->GetStatus() <> 104) {
+				$this->SetStatus(104);
+			}
 			$this->SetTimerInterval("State", 0);
 		}	   
 	}
@@ -573,7 +577,9 @@ class IPS2AcerP5530 extends IPSModule
 	      $result = false;
 	      If (Sys_Ping($this->ReadPropertyString("IPAddress"), 2000)) {
 			//IPS_LogMessage("IPS2AcerP5530","Angegebene IP ".$this->ReadPropertyString("IPAddress")." reagiert");
-			$this->SetStatus(102);
+			If ($this->GetStatus() <> 102) {
+				$this->SetStatus(102);
+			}
 		      	$result = true;
 		}
 		else {
